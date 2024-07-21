@@ -25,26 +25,4 @@ dist-ssr
 
 
 
-src/
-|-- assets/
-|-- components/
-|-- features/
-|   |-- auth/
-|   |-- booking/
-|   |-- support/
-|   |-- vehicles/
-|   |-- ...
-|-- hooks/
-|-- pages/
-|   |-- AdminDashboard.tsx
-|   |-- Home.tsx
-|   |-- Login.tsx
-|   |-- Register.tsx
-|   |-- UserDashboard.tsx
-|-- store/
-|   |-- index.ts
-|-- styles/
-|-- utils/
-|-- App.tsx
-|-- index.tsx
-|-- ...
+
