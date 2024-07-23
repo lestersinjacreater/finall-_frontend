@@ -37,7 +37,9 @@ const Vehicles: React.FC = () => {
 
                     return (
                         <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out">
-                            <img src={specs.image_url} alt={`${specs.manufacturer} ${specs.model}`} className="w-full h-48 object-cover mb-4" />
+
+                            {/* <img src={specs.image_url} alt={`${specs.manufacturer} ${specs.model}`} className="w-full h-48 object-cover mb-4" />
+                             */}
                             <div className="p-4">
                                 <div className="flex justify-between items-center mb-4">
                                     <h3 className="text-xl font-semibold text-teal-600">{`${specs.manufacturer} ${specs.model}`}</h3>

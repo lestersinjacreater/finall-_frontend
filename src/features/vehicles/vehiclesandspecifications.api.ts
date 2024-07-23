@@ -29,7 +29,7 @@ export interface VehicleResponse {
       availability: boolean;
       createdAt: string;
       updatedAt: string;
-      address: string;
+      //address: string;
     };
     vehicle_specs: {
       vehicleSpecId: number;
@@ -42,7 +42,7 @@ export interface VehicleResponse {
       seatingCapacity: number;
       color: string;
       features: string;
-      image_url: string;
+      //image_url: string;
     };
   }
 
@@ -65,7 +65,7 @@ export const VehicleAPI = createApi({
                         availability: item.vehicles.availability,
                         createdAt: item.vehicles.createdAt,
                         updatedAt: item.vehicles.updatedAt,
-                        address: item.vehicles.address,
+                        //address: item.vehicles.address,
                     },
                     vehicle_specs: {
                         vehicleSpecId: item.vehicle_specs.vehicleSpecId,
@@ -78,7 +78,7 @@ export const VehicleAPI = createApi({
                         seatingCapacity: item.vehicle_specs.seatingCapacity,
                         color: item.vehicle_specs.color,
                         features: item.vehicle_specs.features,
-                        image_url: item.vehicle_specs.image_url,
+                        //image_url: item.vehicle_specs.image_url,
                     },
                     
                 }));
