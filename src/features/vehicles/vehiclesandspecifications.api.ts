@@ -8,6 +8,19 @@ export interface Vehicle {
     availability: boolean;
     address: string;
 }
+export interface VehicleSpec {
+    vehicleSpecId:number;
+    nmanufactureYear: number;
+    model: string;
+    year: number;
+    engineCapacity: number;
+    transmission: string;
+    seatingCapacity: number;
+    color: string;
+    features: string;
+    fuelType: string;
+}
+
 
 export const VehicleAPI = createApi({
     reducerPath: 'VehicleAPI',
