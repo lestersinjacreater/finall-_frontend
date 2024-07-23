@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
                 <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
                     {/* Sidebar content here */}
                     <li><Link to="/bookinghistory">BOOKING HISTORY</Link></li>
-                    <li><Link to="current-booking">CURRENT BOOKING</Link></li>
+                    <li><Link to="current-booking">PAYMENTS</Link></li>
                     <li><Link to="customer-support">CUSTOMER SUPPORT</Link></li>
                     <li><Link to="notifications">NOTIFICATIONS</Link></li>
                 </ul>

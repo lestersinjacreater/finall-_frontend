@@ -78,5 +78,5 @@ export const bookingAPI = createApi({
       // Query to get bookings by user ID
       query: (userId) => `/bookings/user/${userId}`, // API endpoint for fetching bookings by user ID
     }),
-  }),
+ }),
 });

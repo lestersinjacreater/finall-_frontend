@@ -13,6 +13,8 @@ import Timelinepage from './pages/timelinepage/timelinepage.tsx';
 import Booking from './pages/bookings/bookings.tsx';
 import Userdashboard from './pages/usersdashboard/usersdashboard.tsx';
 import BookingsHistory from './pages/usersdashboard/bookinghistory.tsx';
+import PaymentSuccess  from './pages/bookings/booking.sucsess.tsx';
+import PaymentFailure from './pages/bookings/booking.failed.tsx';
 
 
 // components
@@ -34,16 +36,34 @@ const router = createBrowserRouter([
     errorElement: <Error />
   },
   {
+    path: '/paymentsuccess',
+    element: <PaymentSuccess />,
+    errorElement: <Error />
+  },
+  {
+    path: '/paymentfailure',
+    element: <PaymentFailure />,
+    errorElement: <Error />
+  },
+  
+  {
     path: '/userdashboard',
     element: <Userdashboard />,
-    errorElement: <Error />
+    errorElement: <Error />,
+    children: [
+      { path: '/bookinghistory', 
+        element: <BookingsHistory />
+       },
+       
+
+
+
+
+
+    ]
   },
 
-  {
-    path: '/bookinghistory',
-    element: <BookingsHistory />,
-    errorElement: <Error />
-  },
+  
   
 
 
