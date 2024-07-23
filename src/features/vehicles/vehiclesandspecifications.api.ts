@@ -1,37 +1,52 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// Define a type for the vehicle
-export interface VehicleSpecifications {
-    vehicleSpecId: number;
-    manufacturer: string;
-    model: string;
-    year: number;
-    fuelType: string;
-    engineCapacity: string;
-    transmission: string;
-    seatingCapacity: number;
-    color: string;
-    features: string;
-    imageUrl?: string; // Ensure this matches the API response
-}
- 
-export  interface APIVehicle {
+export interface Vehicle {
+    vehicle_specs: any;
     vehicleId: number;
     vehicleSpecId: number;
     rentalRate: string;
-    availability: string; // Ensure this matches the API response
-    vehicleSpecifications?: VehicleSpecifications;
+    availability: boolean;
+    address: string;
 }
 
-// Create the API slice
 export const VehicleAPI = createApi({
     reducerPath: 'VehicleAPI',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/api' }), // Update baseUrl as needed
+    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/api' }),
     endpoints: (builder) => ({
-        getVehicles: builder.query<APIVehicle[], void>({
-            query: () => 'vehiclesspecs',
+        getVehicles: builder.query<Vehicle[], void>({
+            query: () => 'vehiclesspecs', // Make sure this matches your API endpoint
+            //providesTags: ['Vehicle']
+        }),
+        
+        createVehicles: builder.mutation<Vehicle, Partial<Vehicle>>({
+            query: (newVehicle) => ({
+                url: 'Vehicles',
+                method: 'POST',
+                body: newVehicle
+            }),
+           // invalidatesTags: ['Vehicle']
+        }),
+        updateVehicles: builder.mutation<Vehicle, Partial<Vehicle> & { id: number }>({
+            query: ({ id, ...updatedVehicles }) => ({
+                url: `Vehicles/${id}`,
+                method: 'PUT',
+                body: updatedVehicles
+            }),
+            //invalidatesTags: ['Vehicle']
+        }),
+        deleteVehicles: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `Vehicles/${id}`,
+                method: 'DELETE'
+            }),
+            //invalidatesTags: ['Vehicle']
         }),
     }),
 });
 
-// export const { useGetVehiclesQuery } = VehicleAPI;
+// export const {
+//     useGetVehiclesQuery,
+//     useCreateVehiclesMutation,
+//     useUpdateVehiclesMutation,
+//     useDeleteVehiclesMutation,
+// } = VehicleAPI;

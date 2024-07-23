@@ -1,135 +1,77 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { VehicleAPI } from '../../features/vehicles/vehiclesandspecifications.api';
-import Navigationbar from './navigation';
-
-// Define the interface for Vehicle Specifications
-interface VehicleSpecifications {
-    color: string | null;
-    engineCapacity: number;
-    features: string | null;
-    fuelType: string | null;
-    manufacturer: string;
-    model: string;
-    seatingCapacity: number;
-    transmission: string;
-    vehicleSpecId: number;
-    year: number;
-}
-
-// Define the interface for the Vehicle object
-interface Vehicle {
-    availability: boolean;
-    createdAt: string;
-    rentalRate: string;
-    updatedAt: string;
-    vehicleId: number;
-    vehicleSpecId: number;
-}
-
-// Define the interface for the API response
-interface APIResponse {
-    vehicle_specs: VehicleSpecifications;
-    vehicles: Vehicle;
-}
+import { VehicleAPI, Vehicle } from '../../features/vehicles/vehiclesandspecifications.api';
 
 const Vehicles: React.FC = () => {
     const { data: vehicles, isLoading, isError } = VehicleAPI.useGetVehiclesQuery();
-    const [expandedCard, setExpandedCard] = useState<number | null>(null);
+    
+    console.log('Vehicles Data:', JSON.stringify(vehicles, null, 2));
 
-    // Handle Book Now button click
-    const handleBookNow = (vehicleId: number, rentalRate: string) => {
+    const formatCurrency = (value: string | undefined) => {
+        if (!value) {
+            return 'N/A';
+        }
+        const numberValue = parseFloat(value.replace(/[^0-9.-]+/g, ''));
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(numberValue);
+    };
+
+    const handleBookNow = (vehicleId: number, rentalRate: string, bookingId: number) => {
         localStorage.setItem("vehicleId", vehicleId.toString());
         localStorage.setItem("rentalRate", rentalRate);
-    };
-
-    // Handle card click to store vehicle ID in local storage
-    const handleCardClick = (vehicleId: number) => {
-        localStorage.setItem("vehicleId", vehicleId.toString());
-    };
-
-    // Toggle expanded card to show/hide additional information
-    const toggleExpandCard = (vehicleId: number) => {
-        setExpandedCard(expandedCard === vehicleId ? null : vehicleId);
+        localStorage.setItem("bookingId", bookingId.toString());
     };
 
     if (isLoading) {
-        return <p className="text-center text-gray-400">Loading...</p>;
+        return <p className="text-center text-gray-600">Loading...</p>;
     }
 
     if (isError) {
-        return <p className="text-center text-red-500">Error loading vehicles. Please try again later.</p>;
+        return <p className="text-center text-red-500">Error loading vehicles.</p>;
     }
 
     return (
-     
-            <div className="p-8 bg-gray-900 min-h-screen">
-                <h1 className="text-3xl font-bold text-gray-200 mb-8 text-center">Available Vehicles</h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                    {vehicles && vehicles.map((item: APIResponses) => (
-                        <div
-                            key={item.vehicles.vehicleId} // Unique key prop
-                            className="bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 transform hover:scale-105 cursor-pointer"
-                            onClick={() => handleCardClick(item.vehicles.vehicleId)} // Handle card click
-                        >
-                            {item.vehicle_specs ? (
-                                <>
-                                    <img
-                                        src={item.vehicle_specs.color ? 'placeholder-image-url' : 'default-image-url'} // Placeholder or default image
-                                        alt={`${item.vehicle_specs.manufacturer} ${item.vehicle_specs.model}`}
-                                        className="w-full h-48 object-cover mb-4"
-                                    />
-                                    <div className="p-6">
-                                        <h3 className="text-xl font-semibold text-gray-200 mb-2">
-                                            {item.vehicle_specs.manufacturer} {item.vehicle_specs.model}
-                                        </h3>
-                                        <div className="flex items-center justify-between mb-4">
-                                            <p className="text-lg font-semibold text-gray-400">
-                                                <span className="text-gray-300">Rental Rate:</span> ${item.vehicles.rentalRate}
-                                            </p>
-                                            <p className={`text-lg font-semibold ${item.vehicles.availability ? 'text-gray-400' : 'text-gray-500'}`}>
-                                                <span className="text-gray-300">Availability:</span> {item.vehicles.availability ? 'Available' : 'Unavailable'}
-                                            </p>
-                                        </div>
-                                        {expandedCard === item.vehicles.vehicleId && (
-                                            <div className="space-y-2 text-gray-400 mb-4">
-                                                <p><strong>Year:</strong> {item.vehicle_specs.year}</p>
-                                                <p><strong>Fuel Type:</strong> {item.vehicle_specs.fuelType || 'N/A'}</p>
-                                                <p><strong>Engine Capacity:</strong> {item.vehicle_specs.engineCapacity} L</p>
-                                                <p><strong>Transmission:</strong> {item.vehicle_specs.transmission}</p>
-                                                <p><strong>Seating Capacity:</strong> {item.vehicle_specs.seatingCapacity}</p>
-                                                <p><strong>Color:</strong> {item.vehicle_specs.color || 'N/A'}</p>
-                                            </div>
-                                        )}
-                                        <button
-                                            className="text-gray-400 hover:text-gray-500 transition-colors duration-300 mb-4"
-                                            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                                                e.stopPropagation(); // Prevent click event from bubbling to card
-                                                toggleExpandCard(item.vehicles.vehicleId);
-                                            }}
-                                        >
-                                            {expandedCard === item.vehicles.vehicleId ? 'See Less' : 'See More'}
-                                        </button>
+        <div className="p-6 bg-gray-100 min-h-screen">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {vehicles && vehicles.map((vehicle: Vehicle, index: number) => (
+                    <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                        {vehicle.vehicle_specs && (
+                            <>
+                                <img src={vehicle.vehicle_specs.image_url} alt={`${vehicle.vehicle_specs.manufacturer} ${vehicle.vehicle_specs.model}`} className="w-full h-48 object-cover mb-4" />
+                                <div className="p-4">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h3 className="text-xl font-semibold text-teal-600">{vehicle.vehicle_specs.manufacturer} {vehicle.vehicle_specs.model}</h3>
                                         <Link
                                             to="/bookings"
-                                            className="bg-black text-white px-4 py-2 rounded-md inline-block font-bold hover:bg-gray-800 transition-colors duration-300"
-                                            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                                                e.stopPropagation(); // Prevent click event from bubbling to card
-                                                handleBookNow(item.vehicles.vehicleId, item.vehicles.rentalRate); // Store vehicle ID and rental rate
-                                            }}
+                                            className="bg-teal-500 text-white px-4 py-2 rounded-md inline-block font-bold hover:bg-teal-600"
+                                            onClick={() => handleBookNow(vehicle.vehicleId, vehicle.rentalRate, vehicle.vehicleSpecId)}
                                         >
                                             Book Now
                                         </Link>
                                     </div>
-                                </>
-                            ) : (
-                                <div className="p-4 text-gray-500">Vehicle specifications are not available.</div>
-                            )}
-                        </div>
-                    ))}
-                </div>
+                                    <div className="mb-4">
+                                        <p className="text-lg font-semibold text-green-600">
+                                            <span className="text-gray-800">Rental Rate:</span> {formatCurrency(vehicle.rentalRate)}
+                                        </p>
+                                        <p className={`text-lg font-semibold ${vehicle.availability ? 'text-green-600' : 'text-red-600'}`}>
+                                            <span className="text-gray-800">Availability:</span> {vehicle.availability ? 'Available' : 'Unavailable'}
+                                        </p>
+                                    </div>
+                                    <div className="space-y-2 text-gray-700">
+                                        <p><strong>Year:</strong> {vehicle.vehicle_specs.year}</p>
+                                        <p><strong>Fuel Type:</strong> {vehicle.vehicle_specs.fuelType}</p>
+                                        <p><strong>Engine Capacity:</strong> {vehicle.vehicle_specs.engineCapacity}</p>
+                                        <p><strong>Transmission:</strong> {vehicle.vehicle_specs.transmission}</p>
+                                        <p><strong>Seating Capacity:</strong> {vehicle.vehicle_specs.seatingCapacity}</p>
+                                        <p><strong>Color:</strong> {vehicle.vehicle_specs.color}</p>
+                                        <p><strong>Features:</strong> {vehicle.vehicle_specs.features}</p>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                ))}
             </div>
-        
+        </div>
     );
 };
 
