@@ -28,7 +28,7 @@ export const VehicleAPI = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'https://drill-wheel-rental-system-backend.onrender.com/api' }),
     endpoints: (builder) => ({
         getVehicles: builder.query<VehicleResponse[], void>({
-            query: () => 'vehiclesspecs',
+            query: () => 'vehiclesSpecs',
             transformResponse: (response: VehicleResponse[]) => {
                 return response.map((item) => ({
                     vehicles: {
