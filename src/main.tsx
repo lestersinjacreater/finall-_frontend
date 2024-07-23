@@ -10,6 +10,9 @@ import { store, persistor } from './app/store.ts';
 import LandingPage from './pages/landingpage.tsx';
 import Error from './pages/error.tsx';
 import Timelinepage from './pages/timelinepage/timelinepage.tsx';
+import Booking from './pages/bookings/bookings.tsx';
+import Userdashboard from './pages/usersdashboard/usersdashboard.tsx';
+import BookingsHistory from './pages/usersdashboard/bookinghistory.tsx';
 
 
 // components
@@ -25,6 +28,23 @@ const router = createBrowserRouter([
     element: <Timelinepage />,
     errorElement: <Error />
   },
+  {
+    path: '/bookings',
+    element: <Booking />,
+    errorElement: <Error />
+  },
+  {
+    path: '/userdashboard',
+    element: <Userdashboard />,
+    errorElement: <Error />
+  },
+
+  {
+    path: '/bookinghistory',
+    element: <BookingsHistory />,
+    errorElement: <Error />
+  },
+  
 
 
 

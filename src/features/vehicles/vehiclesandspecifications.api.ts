@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 // Define a type for the vehicle
-interface VehicleSpecifications {
+export interface VehicleSpecifications {
     vehicleSpecId: number;
     manufacturer: string;
     model: string;

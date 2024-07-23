@@ -2,12 +2,15 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import userSlice from '../features/users/userSlice';
-import { VehicleAPI } from '../features/vehicles/vehiclesandspecifications.api';
+
 
 // Import other APIs if needed
 import { usersAPI } from '../features/users/user.api';
 import { loginAPI } from '../features/authentication/login.api';
 import { registerAPI } from '../features/authentication/register.api';
+import { VehicleAPI } from '../features/vehicles/vehiclesandspecifications.api';
+import { bookingAPI } from '../features/booking/booking.api';
+import { paymentAPI } from '../features/payments/payments.api';
 
 // Define persist configuration
 const persistConfig = {
@@ -21,6 +24,8 @@ const rootReducer = combineReducers({
     [loginAPI.reducerPath]: loginAPI.reducer,
     [registerAPI.reducerPath]: registerAPI.reducer,
     [VehicleAPI.reducerPath]: VehicleAPI.reducer,
+    [bookingAPI.reducerPath]: bookingAPI.reducer,
+    [paymentAPI.reducerPath]: paymentAPI.reducer,
     user: userSlice,
     // Add additional reducers here as needed
     // [timelineAPI.reducerPath]: timelineAPI.reducer,
@@ -39,7 +44,9 @@ export const store = configureStore({
             .concat(usersAPI.middleware)
             .concat(loginAPI.middleware)
             .concat(registerAPI.middleware)
-            .concat(VehicleAPI.middleware),
+            .concat(bookingAPI.middleware)
+            .concat(VehicleAPI.middleware)
+            .concat(paymentAPI.middleware),
 });
 
 export const persistor = persistStore(store);

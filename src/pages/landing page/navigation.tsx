@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Import the login and registration API hooks
 import { loginAPI } from '../../features/authentication/login.api'; // Adjust the import path accordingly
@@ -21,6 +21,7 @@ const InputField = ({ label, type, name, placeholder, required }: InputFieldProp
 );
 
 const Navbar = () => {
+    const navigate = useNavigate();
     const [isLoginVisible, setIsLoginVisible] = useState(false);
     const [isRegisterVisible, setIsRegisterVisible] = useState(false);
     const [loginUser, { isLoading: isLoginLoading, error: loginError }] = loginAPI.useLoginUserMutation();
@@ -44,11 +45,16 @@ const Navbar = () => {
         try {
             const response = await loginUser({ email, password }).unwrap();
             console.log('Login successful:', response);
-            
+
+            console.log('Token:', response.token);
+
             // Store the token in local storage
             localStorage.setItem('token', response.token);
-            
+
             setIsLoginVisible(false);
+
+            // Navigate to the timeline page
+            navigate('/timeline');
         } catch (err) {
             console.error('Failed to login:', err);
         }
@@ -69,6 +75,9 @@ const Navbar = () => {
 
             setIsRegisterVisible(false);
             setIsLoginVisible(false);
+
+            // Navigate to the timeline page
+            navigate('/timeline');
         } catch (err) {
             console.error('Failed to register:', err);
         }
@@ -105,8 +114,21 @@ const Navbar = () => {
                     </div>
                     <Link to="/" className="btn btn-ghost text-xl text-white">DRILL WHEELS</Link>
                 </div>
+                <div className="navbar-center hidden lg:flex">
+                    <ul className="menu menu-horizontal space-x-4">
+                        <li><Link to="/">WHY CHOOSE US</Link></li>
+                        <li className="relative group">
+                            <Link to="/">AVAILABLE VEHICLES</Link>
+                            <ul className="absolute left-0 top-full hidden bg-base-100 shadow-lg group-hover:block p-2 rounded-lg z-10">
+                                <li><Link to="/">AVAILABLE BRANDS</Link></li>
+                                <li><Link to="/">AVAILABLE BODY TYPES</Link></li>
+                            </ul>
+                        </li>
+                        <li><Link to="/">HOW WE WORK</Link></li>
+                    </ul>
+                </div>
                 <div className="navbar-end">
-                    <button onClick={handleRegisterClick} className="btn bg-bl text-white">REGISTER</button>
+                    <button onClick={handleRegisterClick} className="btn bg-bl text-white mr-2">REGISTER</button>
                     <button onClick={handleLoginClick} className="btn text-white">LOGIN</button>
                 </div>
             </nav>

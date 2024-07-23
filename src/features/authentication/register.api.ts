@@ -17,4 +17,3 @@ export const registerAPI = createApi({
   }),
 });
 
-//export const { useRegisterUserMutation, useGetUsersQuery } = registerAPI;

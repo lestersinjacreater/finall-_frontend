@@ -1,13 +1,15 @@
-
 import { CardData } from "../../components/cardData/CardData"; // Importing card data
 
 const Card = () => {
     return (
         <div className="min-h-screen bg-black pt-10 px-10"> {/* Main container with black background, top padding, and horizontal padding */}
             <h1 className="text-2xl font-bold text-left text-white mb-5">Available Brands</h1> {/* Title at the top left in white */}
-            <div className="grid grid-cols-6 gap-4 justify-center"> {/* Grid container for cards with centered justification */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 justify-center"> {/* Responsive grid container for cards with centered justification */}
                 {CardData.slice(0, 12).map((data, index) => ( // Map over the first 12 cards
-                    <div key={index} className="card bg-white shadow-xl w-40 h-40"> {/* Individual card with white background and square dimensions */}
+                    <div
+                        key={index}
+                        className="card bg-white shadow-xl w-40 h-40 transition-transform transform hover:scale-105" // Individual card with white background, square dimensions, and hover effect
+                    >
                         <figure className="h-24"> {/* Image container with fixed height */}
                             <img src={data.image} alt={data.name} className="object-cover w-full h-full" /> {/* Card image with cover */}
                         </figure>
