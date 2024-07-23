@@ -1,23 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-// Define interfaces for related entities
-interface User {
-  userId: number;
-  name: string;
-  email: string;
-}
 
-interface Vehicle {
-  vehicleId: number;
-  make: string;
-  model: string;
-}
 
-interface Location {
-  locationId: number;
-  name: string;
-  address: string;
-}
 
 // Define the interface for Booking
 export interface Booking {
@@ -53,7 +37,7 @@ export const bookingAPI = createApi({
         body: newBooking, // Request body
       }),
       // Side effect to handle the response
-      async onQueryStarted(arg, { queryFulfilled }) {
+      async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           if (data.bookingId) {

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { bookingAPI } from '../../features/booking/booking.api';
 import { paymentAPI } from '../../features/payments/payments.api';
 import { loadStripe } from '@stripe/stripe-js';
@@ -53,7 +52,6 @@ const Booking: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   const [createBooking] = bookingAPI.useCreateBookingMutation(); // Use the mutation hook
   const [createPayment] = paymentAPI.useCreatePaymentMutation(); // Use the mutation hook
