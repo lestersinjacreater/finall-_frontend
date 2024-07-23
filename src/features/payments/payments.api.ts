@@ -22,7 +22,7 @@ export interface CreatePaymentResponse {
 
 export const paymentAPI = createApi({
     reducerPath: 'paymentAPI',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/api' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://drill-wheel-rental-system-backend.onrender.com/api' }),
     tagTypes: ['Payment'],
     endpoints: (builder) => ({
         // Define the endpoint for fetching a payment by ID

@@ -1,2 +1,2 @@
 // local host
-export const APIDomain = 'http://localhost:3000'
+export const APIDomain = 'https://drill-wheel-rental-system-backend.onrender.com/api';

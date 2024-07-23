@@ -26,7 +26,7 @@ export interface CreateBookingResponse {
 // Define the bookingAPI with RTK Query
 export const bookingAPI = createApi({
   reducerPath: 'bookingAPI', // Unique key to store the reducer in the Redux store
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/api' }), // Base URL for API requests
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://drill-wheel-rental-system-backend.onrender.com/api' }), // Base URL for API requests
   endpoints: (builder) => ({
     // Define the endpoints for the API
     createBooking: builder.mutation<CreateBookingResponse, Partial<Booking>>({

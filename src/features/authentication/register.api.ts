@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const registerAPI = createApi({
   reducerPath: 'registerAPI',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/api' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://drill-wheel-rental-system-backend.onrender.com/api' }),
   endpoints: (builder) => ({
     registerUser: builder.mutation({
       query: (newUser) => ({

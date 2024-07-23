@@ -11,7 +11,7 @@ export interface Vehicle {
 
 export const VehicleAPI = createApi({
     reducerPath: 'VehicleAPI',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/api' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://drill-wheel-rental-system-backend.onrender.com/api' }),
     endpoints: (builder) => ({
         getVehicles: builder.query<Vehicle[], void>({
             query: () => 'vehiclesspecs', // Make sure this matches your API endpoint

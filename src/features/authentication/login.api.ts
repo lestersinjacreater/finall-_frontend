@@ -21,7 +21,7 @@ export interface LoggedInUser {
 // Create an API slice for login operations
 export const loginAPI = createApi({
     reducerPath: 'loginAPI',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/api' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://drill-wheel-rental-system-backend.onrender.com/api' }),
     endpoints: (builder) => ({
         loginUser: builder.mutation<LoggedInUser, LogInUser>({
             query: (user) => ({
