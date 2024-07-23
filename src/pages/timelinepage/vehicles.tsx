@@ -14,6 +14,8 @@ const VehiclesList = () => {
     const { data: vehiclesData, error, isLoading } = VehicleAPI.useGetVehiclesQuery();
     const [expandedVehicleId, setExpandedVehicleId] = useState<number | null>(null);
 
+    console.log(vehiclesData);
+
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error loading vehicles</div>;
 
