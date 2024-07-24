@@ -7,7 +7,7 @@ export interface LogInUser {
 }
 
 export interface LoggedInUser {
-    userId: number;
+    userId: string;
     full_name: string | null;
     email: string | null;
     contact_phone: string | null;

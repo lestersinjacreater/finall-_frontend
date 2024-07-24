@@ -48,7 +48,7 @@ const Navbar = () => {
 
             // Store the token and user ID in local storage
             localStorage.setItem('token', response.token);
-            localStorage.setItem('userId', response.userId.toString());
+            localStorage.setItem('userId', response.userId);
 
             setIsLoginVisible(false);
 
