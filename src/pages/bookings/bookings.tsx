@@ -150,7 +150,7 @@ const Booking: React.FC = () => {
           />
         </div>
         <div className="mb-6">
-          <label htmlFor="locationName" className="block text-gray-700 font-medium mb-2">
+          <label htmlFor="locationName" className="block   text-gray-700 font-medium mb-2">
             Location Name
           </label>
           <input
