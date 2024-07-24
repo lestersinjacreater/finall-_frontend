@@ -1,6 +1,6 @@
-
 import { VehicleAPI } from '../../features/vehicles/vehiclesandspecifications.api'; // Adjust the import path as necessary
 import { useNavigate } from 'react-router-dom';
+import './Vehicles.css'; // Import the CSS file for styling
 
 const Vehicles = () => {
   const { data: vehicles, isLoading, isError } = VehicleAPI.useGetVehiclesQuery();
@@ -16,22 +16,22 @@ const Vehicles = () => {
   if (isError || !vehicles) return <div>Failed to load vehicles</div>;
 
   return (
-    <div>
+    <div className="vehicles-container">
       <h2>Vehicles</h2>
       {vehicles.length > 0 ? (
-        <ul>
+        <div className="vehicles-grid">
           {vehicles.map(({ vehicles }) => (
-            <li key={vehicles.vehicleId}>
+            <div key={vehicles.vehicleId} className="vehicle-card">
               <p>ID: {vehicles.vehicleId}</p>
               <p>Rate: {vehicles.rentalRate}</p>
               <p>Availability: {vehicles.availability ? 'Available' : 'Not Available'}</p>
               {/* Add more vehicle details as needed */}
               <button onClick={() => handleSelectVehicle(vehicles.vehicleId, vehicles.rentalRate)}>
-                book now
+                Book Now
               </button>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
         <p>No vehicles found</p>
       )}
