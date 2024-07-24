@@ -48,7 +48,7 @@ const Navbar = () => {
 
             // Store the token and user ID in local storage
             localStorage.setItem('jwtToken', response.token);
-            localStorage.setItem('userId', response.userId);
+            localStorage.setItem('userId', response.userId.toString());
 
             setIsLoginVisible(false);
 

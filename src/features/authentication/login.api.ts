@@ -7,7 +7,7 @@ export interface LogInUser {
 }
 
 export interface LoggedInUser {
-    userId: string;
+    userId: number;
     full_name: string | null;
     email: string | null;
     contact_phone: string | null;
@@ -32,7 +32,7 @@ export const loginAPI = createApi({
             // Handle successful login by storing token and userId in local storage
             transformResponse: (response: LoggedInUser) => {
                 localStorage.setItem('jwtToken', response.token);
-                localStorage.setItem('userId', response.userId);
+                localStorage.setItem('userId', response.userId.toString());
                 return response;
             }
         }),
