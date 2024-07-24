@@ -9,7 +9,7 @@ const Vehicles = () => {
   const handleSelectVehicle = (vehicleId: number, rentalRate: number) => {
     localStorage.setItem('selectedVehicleId', vehicleId.toString());
     localStorage.setItem('selectedVehicleRentalRate', rentalRate.toString());
-    navigate('/booking-form'); // Adjust the path as necessary
+    navigate('/bookings'); // Adjust the path as necessary
   };
 
   if (isLoading) return <div>Loading vehicles...</div>;
@@ -27,7 +27,7 @@ const Vehicles = () => {
               <p>Availability: {vehicles.availability ? 'Available' : 'Not Available'}</p>
               {/* Add more vehicle details as needed */}
               <button onClick={() => handleSelectVehicle(vehicles.vehicleId, vehicles.rentalRate)}>
-                Select Vehicle
+                book now
               </button>
             </li>
           ))}
