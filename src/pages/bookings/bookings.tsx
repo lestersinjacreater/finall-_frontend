@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
+import { bookingAPI } from '../../features/booking/booking.api'; // Adjust the import path as needed
 
-// Initialize Stripe with your public key
 const stripePromise = loadStripe('pk_test_51PfLsj2MixLHpnNSRGgtzO9CCu1gmQcMocDfPy7k7csSKkTBs5YmpDqzK7BgLMisuOFjbrv26nMPxex3pjUwQ9gO00ctq4Xp1A');
 
-// Define the form field interface
 interface BookingFormFields {
   userId: number;
   vehicleId: number;
@@ -17,9 +16,7 @@ interface BookingFormFields {
   rentalRate: number;
 }
 
-// Define the booking component
 const Booking: React.FC = () => {
-  // Retrieve userId from JWT token stored in local storage
   const getUserIdFromToken = (): number => {
     const token = localStorage.getItem('jwtToken');
     if (token) {
@@ -51,7 +48,8 @@ const Booking: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Calculate the number of days between two dates
+  const [createBooking] = bookingAPI.useCreateBookingMutation();
+
   const calculateDaysBetween = (startDate: string, endDate: string): number => {
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -59,7 +57,6 @@ const Booking: React.FC = () => {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
-  // Update total amount whenever bookingDate, returnDate, or rentalRate changes
   useEffect(() => {
     if (formFields.bookingDate && formFields.returnDate) {
       const days = calculateDaysBetween(formFields.bookingDate, formFields.returnDate);
@@ -70,75 +67,37 @@ const Booking: React.FC = () => {
     }
   }, [formFields.bookingDate, formFields.returnDate, formFields.rentalRate]);
 
-  // Handle form field changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormFields((prevFields) => ({ ...prevFields, [name]: value }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
     try {
-      console.log('Submitting booking form:', formFields); // Debug form submission
+      console.log('Submitting booking form:', formFields);
 
-      // Create a booking first
-      const bookingResponse = await fetch('http://localhost:3000/api/bookings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formFields),
-      });
+      const response = await createBooking(formFields).unwrap();
+      const data: { bookingId: number } = response; // Replace 'bookingId' with the correct property name from 'CreateBookingResponse'
+      console.log('Booking Response:', data);
 
-      if (!bookingResponse.ok) {
-        throw new Error('Failed to create booking');
-      }
-
-      const bookingData = await bookingResponse.json();
-      console.log('Booking Response:', bookingData); // Debug booking response
-
-      // Verify bookingId presence
-      if (!bookingData || !bookingData.bookingId) {
+      if (!data || !data.bookingId) {
         throw new Error('Booking ID is undefined or response is invalid');
       }
 
-      // Create a payment session using the booking ID
-      const paymentResponse = await fetch('http://localhost:3000/api/payments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          bookingId: bookingData.bookingId,
-          userId: formFields.userId,
-          amount: formFields.totalAmount,
-          paymentStatus: 'Pending',
-          paymentMethod: 'card', // or the appropriate method
-        }),
-      });
-
-      if (!paymentResponse.ok) {
-        throw new Error('Failed to create payment');
-      }
-
-      const paymentData = await paymentResponse.json();
-      console.log('Payment Response:', paymentData); // Debug payment response
-
-      // Redirect to Stripe checkout page
       const stripe = await stripePromise;
       if (stripe) {
-        await stripe.redirectToCheckout({ sessionId: paymentData.sessionId });
-        console.log('Redirecting to checkout with sessionId:', paymentData.sessionId); // Debug redirect
+        await stripe.redirectToCheckout({ sessionId: data.bookingId.toString() });
+        console.log('Redirecting to checkout with sessionId:', data.bookingId);
       } else {
-        console.error('Stripe initialization failed'); // Error handling
+        console.error('Stripe initialization failed');
         setError('Stripe failed to initialize');
       }
     } catch (error: any) {
-      console.error('Error during booking and payment process:', error); // Debug error
+      console.error('Error during booking and payment process:', error);
       setError(error.message || 'Something went wrong');
     } finally {
       setIsSubmitting(false);
@@ -185,7 +144,7 @@ const Booking: React.FC = () => {
             type="text"
             id="totalAmount"
             name="totalAmount"
-            value={formFields.totalAmount.toString()} // Ensure totalAmount is displayed as string
+            value={formFields.totalAmount}
             readOnly
             className="border border-gray-300 rounded-md px-4 py-2 w-full bg-gray-100"
           />
