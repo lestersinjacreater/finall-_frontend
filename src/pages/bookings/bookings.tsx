@@ -31,6 +31,7 @@ const Booking: React.FC = () => {
       }
     }
     throw new Error('No token found');
+    console.log ('User ID:', getUserIdFromToken());
   };
 
   // Retrieve vehicle ID and rental rate from localStorage
