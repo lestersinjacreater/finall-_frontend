@@ -32,6 +32,7 @@ export const loginAPI = createApi({
             // Handle successful login by storing token in local storage
             transformResponse: (response: LoggedInUser) => {
                 localStorage.setItem('jwtToken', response.token);
+                localStorage.setItem('userId', response.id.toString());
                 return response;
             }
         }),
