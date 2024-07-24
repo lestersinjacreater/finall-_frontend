@@ -55,20 +55,14 @@ const router = createBrowserRouter([
       // { path: '/bookinghistory', 
       //   element: <BookingsHistory />
       //  },
-
-
-
-
-
-
-    ]
+      ]
   },
   {
     path: '/admindashboard',
     element: <Admindashboard />,
     errorElement: <Error />
 
-    
+
   },
 
   
