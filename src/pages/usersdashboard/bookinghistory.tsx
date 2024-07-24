@@ -1,11 +1,14 @@
 import React from 'react';
-import { bookingAPI } from '../../features/booking/booking.api';
-
+import { BookingAPI } from '../../features/booking/booking.api';
 
 const BookingsHistory: React.FC = () => {
-  const userId = localStorage.getItem('userId'); // Fetch the user ID from local storage
+  const userId: string | null = localStorage.getItem('userId'); // Fetch the user ID from local storage
 
-  const { data: bookings, error, isLoading } = bookingAPI.useGetBookingsByUserIdQuery(Number(userId));
+  if (!userId) {
+    return <div className="text-center text-gray-400">User ID not found. Please log in.</div>;
+  }
+
+  const { data: bookings, error, isLoading } = BookingAPI.useGetBookingByUserIdQuery(Number(userId));
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error fetching booking history.</div>;

@@ -1,8 +1,8 @@
 
-import { bookingAPI } from '../../features/booking/booking.api'; // Adjust the import path as necessary
+import { BookingAPI } from '../../features/booking/booking.api'; // Adjust the import path as necessary
 
 const AllBookings = () => {
-  const { data: bookings, isLoading, isError } = bookingAPI.useGetAllBookingsQuery();
+  const { data: bookings, isLoading, isError } = BookingAPI.useGetBookingQuery();
 
   if (isLoading) return <div>Loading bookings...</div>;
   if (isError || !bookings) return <div>Failed to load bookings</div>;
