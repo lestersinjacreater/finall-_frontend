@@ -7,7 +7,7 @@ export interface LogInUser {
 }
 
 export interface LoggedInUser {
-    user_id: number;
+    userId: string;
     full_name: string | null;
     email: string | null;
     contact_phone: string | null;
@@ -31,8 +31,23 @@ export const loginAPI = createApi({
             }),
             // Handle successful login by storing token and userId in local storage
             transformResponse: (response: LoggedInUser) => {
+                if (!response) {
+                    throw new Error('No response from server');
+                }
+
+                console.log('Login response:', response); // Log the response to inspect its structure
+
+                if (!response.token) {
+                    throw new Error('Token is missing in the response');
+                }
+
+                if (!response.userId) {
+                    throw new Error('User ID is missing in the response');
+                }
+
                 localStorage.setItem('jwtToken', response.token);
-                localStorage.setItem('userId', response.user_id.toString());
+                localStorage.setItem('userId', response.userId.toString());
+
                 return response;
             }
         }),

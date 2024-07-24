@@ -37,27 +37,36 @@ const Navbar = () => {
         setIsLoginVisible(false);
     };
 
+    
+    
     const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const email = e.currentTarget.email.value;
         const password = e.currentTarget.password.value;
-
+    
         try {
             const response = await loginUser({ email, password }).unwrap();
             console.log('Login successful:', response);
-
+    
+            // Check if response is valid
+            if (!response || !response.token || !response.userId) {
+                throw new Error('Invalid response from server');
+            }
+    
             // Store the token and user ID in local storage
             localStorage.setItem('jwtToken', response.token);
-            localStorage.setItem('userId', response.user_id.toString());
-
+            localStorage.setItem('userId', response.userId.toString());
+    
             setIsLoginVisible(false);
-
+    
             // Navigate to the timeline page
             navigate('/timeline');
         } catch (err) {
             console.error('Failed to login:', err);
         }
     };
+    
+    
 
     const handleRegisterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
