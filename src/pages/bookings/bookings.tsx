@@ -64,6 +64,7 @@ const Booking: React.FC = () => {
     const end = new Date(endDate);
     const diffTime = Math.abs(end.getTime() - start.getTime());
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
   };
 
   // Effect hook to calculate total amount whenever booking or return dates change
@@ -73,7 +74,9 @@ const Booking: React.FC = () => {
       setFormFields((prevFields) => ({
         ...prevFields,
         totalAmount: days * prevFields.rentalRate,
+        console,
       }));
+      console.log('Total amount:', days * formFields.rentalRate);
     }
   }, [formFields.bookingDate, formFields.returnDate, formFields.rentalRate]);
 
@@ -84,6 +87,7 @@ const Booking: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
+    console.log('Submitting booking form:', formFields);
 
     try {
       console.log('Submitting booking form:', formFields);
