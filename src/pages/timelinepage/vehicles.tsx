@@ -1,4 +1,3 @@
-
 import { VehicleAPI } from '../../features/vehicles/vehiclesandspecifications.api'; // Adjust the import path as necessary
 import { useNavigate } from 'react-router-dom';
 
@@ -12,28 +11,34 @@ const Vehicles = () => {
     navigate('/bookings'); // Adjust the path as necessary
   };
 
-  if (isLoading) return <div>Loading vehicles...</div>;
-  if (isError || !vehicles) return <div>Failed to load vehicles</div>;
+  if (isLoading) return <div className="text-center text-gray-500">Loading vehicles...</div>;
+  if (isError || !vehicles) return <div className="text-center text-red-500">Failed to load vehicles</div>;
 
   return (
-    <div>
-      <h2>Vehicles</h2>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">Available Vehicles</h2>
       {vehicles.length > 0 ? (
-        <ul>
-          {vehicles.map(({ vehicles }) => (
-            <li key={vehicles.vehicleId}>
-              <p>ID: {vehicles.vehicleId}</p>
-              <p>Rate: {vehicles.rentalRate}</p>
-              <p>Availability: {vehicles.availability ? 'Available' : 'Not Available'}</p>
-              {/* Add more vehicle details as needed */}
-              <button onClick={() => handleSelectVehicle(vehicles.vehicleId, vehicles.rentalRate)}>
-                book now
-              </button>
+        <ul className="space-y-4">
+          {vehicles.map(({ vehicleId, rentalRate, availability }) => (
+            <li key={vehicleId} className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+              <div className="flex flex-col gap-2">
+                <p className="text-lg font-semibold text-gray-700">ID: {vehicleId}</p>
+                <p className="text-lg text-gray-600">Rate: ${rentalRate.toFixed(2)}</p>
+                <p className={`text-lg ${availability ? 'text-green-500' : 'text-red-500'}`}>
+                  {availability ? 'Available' : 'Not Available'}
+                </p>
+                <button
+                  onClick={() => handleSelectVehicle(vehicleId, rentalRate)}
+                  className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
+                >
+                  Book Now
+                </button>
+              </div>
             </li>
           ))}
         </ul>
       ) : (
-        <p>No vehicles found</p>
+        <p className="text-center text-gray-600 mt-6">No vehicles found</p>
       )}
     </div>
   );

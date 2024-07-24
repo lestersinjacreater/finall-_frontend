@@ -34,10 +34,10 @@ export const bookingAPI = createApi({
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          if (data.bookingId) {
+          if (data && data.bookingId) {
             console.log('Booking ID:', data.bookingId);
           } else {
-            console.error('Booking ID not found in response:', data);
+            console.error('Unexpected response format:', data);
           }
         } catch (error) {
           console.error('Error during booking creation:', error);
@@ -74,7 +74,7 @@ export const bookingAPI = createApi({
   }),
 });
 
-// Export hooks for usage in functional components
+// // Export hooks for usage in functional components
 // export const { 
 //   useCreateBookingMutation, 
 //   useGetBookingByIdQuery, 
