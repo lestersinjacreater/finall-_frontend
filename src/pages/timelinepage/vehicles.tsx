@@ -1,36 +1,48 @@
-import React from 'react';
-import { VehicleAPI,VehicleResponse } from '../../features/vehicles/vehiclesandspecifications.api';
+// import React from 'react';
+// import { VehicleAPI } from '../../features/vehicles/vehiclesandspecifications.api'; // Adjust the import path as necessary
+// import { useHistory } from 'react-router-dom';
 
+// // Assuming you're using react-router v6 or above
+// import { useNavigate } from 'react-router-dom';
 
-const Vehicle: React.FC = () => {
-    const { data: vehiclesData, error, isLoading } = VehicleAPI.useGetVehiclesQuery();
+// // Assuming you're using react-router v5 or below
+// // import { useHistory } from 'react-router-dom';
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error fetching data</div>;
+// const Vehicles = () => {
+//   const { data: vehicles, isLoading, isError } = VehicleAPI.useGetVehiclesQuery();
+//   const history = useHistory();
 
-    return (
-        <div>
-            <h1>Vehicles</h1>
-            <ul>
-                {vehiclesData && vehiclesData.map((item: VehicleResponse, index: number) => (
-                    <li key={index}>
-                        <h2>{item.vehicle_specs.manufacturer} {item.vehicle_specs.model}</h2>
-                        <p>Year: {item.vehicle_specs.year}</p>
-                        <p>Fuel Type: {item.vehicle_specs.fuelType}</p>
-                        <p>Engine Capacity: {item.vehicle_specs.engineCapacity}L</p>
-                        <p>Transmission: {item.vehicle_specs.transmission}</p>
-                        <p>Seating Capacity: {item.vehicle_specs.seatingCapacity}</p>
-                        <p>Color: {item.vehicle_specs.color}</p>
-                        <p>Features: {item.vehicle_specs.features}</p>
-                        <p>Rental Rate: ${item.vehicles.rentalRate}/day</p>
-                        <p>Availability: {item.vehicles.availability ? 'Available' : 'Not Available'}</p>
-                        <p>Created At: {new Date(item.vehicles.createdAt).toLocaleString()}</p>
-                        <p>Updated At: {new Date(item.vehicles.updatedAt).toLocaleString()}</p>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-};
+//   const handleSelectVehicle = (vehicleId: number, rentalRate: number) => {
+//     localStorage.setItem('selectedVehicleId', vehicleId.toString());
+//     localStorage.setItem('selectedVehicleRentalRate', rentalRate.toString());
+//     history.push('/booking-form'); // Adjust the path as necessary
+//   };
 
-export default Vehicle;
+//   if (isLoading) return <div>Loading vehicles...</div>;
+//   if (isError || !vehicles) return <div>Failed to load vehicles</div>;
+
+//   return (
+//     <div>
+//       <h2>Vehicles</h2>
+//       {vehicles.length > 0 ? (
+//         <ul>
+//           {vehicles.map(({ vehicles }) => (
+//             <li key={vehicles.vehicleId}>
+//               <p>ID: {vehicles.vehicleId}</p>
+//               <p>Rate: {vehicles.rentalRate}</p>
+//               <p>Availability: {vehicles.availability ? 'Available' : 'Not Available'}</p>
+//               {/* Add more vehicle details as needed */}
+//               <button onClick={() => handleSelectVehicle(vehicles.vehicleId, vehicles.rentalRate)}>
+//                 Select Vehicle
+//               </button>
+//             </li>
+//           ))}
+//         </ul>
+//       ) : (
+//         <p>No vehicles found</p>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Vehicles;

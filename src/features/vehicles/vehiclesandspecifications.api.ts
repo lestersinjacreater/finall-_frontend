@@ -20,66 +20,75 @@ export interface VehicleResponse {
         seatingCapacity: number;
         color: string;
         features: string;
-    };
+    }
 }
+
+    //define the response type for fetching vehicles
+    export interface VehicleResponse {
+        vehicleId: number;
+        vehicleSpecId: number;
+        rentalRate: number;
+        availability: boolean;
+        createdAt: string;
+        updatedAt: string;
+    };
+    export interface VehicleSpecs {
+        vehicleSpecId: number;
+        manufacturer: string;
+        model: string;
+        year: number;
+        fuelType: string;
+        engineCapacity: number;
+        transmission: string;
+        seatingCapacity: number;
+        color: string;
+        features: string;
+    }
 
 export const VehicleAPI = createApi({
     reducerPath: 'VehicleAPI',
     baseQuery: fetchBaseQuery({ baseUrl: 'https://drill-wheel-rental-system-backend.onrender.com/api' }),
+    tagTypes: ['Vehicle'],
     endpoints: (builder) => ({
+        // Define the endpoint for fetching vehicles
         getVehicles: builder.query<VehicleResponse[], void>({
-            query: () => 'vehiclespecs',
-            transformResponse: (response: VehicleResponse[]) => {
-                return response.map((item) => ({
-                    vehicles: {
-                        vehicleId: item.vehicles.vehicleId,
-                        vehicleSpecId: item.vehicles.vehicleSpecId,
-                        rentalRate: item.vehicles.rentalRate,
-                        availability: item.vehicles.availability,
-                        createdAt: item.vehicles.createdAt,
-                        updatedAt: item.vehicles.updatedAt,
-                    },
-                    vehicle_specs: {
-                        vehicleSpecId: item.vehicle_specs.vehicleSpecId,
-                        manufacturer: item.vehicle_specs.manufacturer,
-                        model: item.vehicle_specs.model,
-                        year: item.vehicle_specs.year,
-                        fuelType: item.vehicle_specs.fuelType,
-                        engineCapacity: item.vehicle_specs.engineCapacity,
-                        transmission: item.vehicle_specs.transmission,
-                        seatingCapacity: item.vehicle_specs.seatingCapacity,
-                        color: item.vehicle_specs.color,
-                        features: item.vehicle_specs.features,
-                    },
-                }));
-            },
+            query: () => `vehicles`,
+            providesTags: ['Vehicle'],
         }),
-        createVehicles: builder.mutation<VehicleResponse, Partial<VehicleResponse>>({
+        // Define the endpoint for fetching a vehicle by ID
+        getVehicleById: builder.query<VehicleResponse, number>({
+            query: (vehicleId) => `vehicles/${vehicleId}`,
+            providesTags: ['Vehicle'],
+        }),
+        // Define the endpoint for creating a vehicle
+        createVehicle: builder.mutation<VehicleResponse, {
+            vehicleSpecId: number;
+            rentalRate: number;
+            availability: boolean;
+        }>({
             query: (newVehicle) => ({
-                url: 'Vehicles',
+                url: `vehicles`,
                 method: 'POST',
                 body: newVehicle,
             }),
+            invalidatesTags: ['Vehicle'],
         }),
-        updateVehicles: builder.mutation<VehicleResponse, Partial<VehicleResponse> & { id: number }>({
-            query: ({ id, ...updatedVehicles }) => ({
-                url: `Vehicles/${id}`,
+        // Define the endpoint for updating a vehicle
+        updateVehicle: builder.mutation<VehicleResponse, VehicleResponse>({
+            query: (updatedVehicle) => ({
+                url: `vehicles/${updatedVehicle.vehicleId}`,
                 method: 'PUT',
-                body: updatedVehicles,
+                body: updatedVehicle,
             }),
+            invalidatesTags: ['Vehicle'],
         }),
-        deleteVehicles: builder.mutation<void, number>({
-            query: (id) => ({
-                url: `Vehicles/${id}`,
+        // Define the endpoint for deleting a vehicle
+        deleteVehicle: builder.mutation<void, number>({
+            query: (vehicleId) => ({
+                url: `vehicles/${vehicleId}`,
                 method: 'DELETE',
             }),
+            invalidatesTags: ['Vehicle'],
         }),
     }),
 });
-
-// export const {
-//     useGetVehiclesQuery,
-//     useCreateVehiclesMutation,
-//     useUpdateVehiclesMutation,
-//     useDeleteVehiclesMutation,
-// } = VehicleAPI;

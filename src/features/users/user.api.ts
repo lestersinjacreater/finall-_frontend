@@ -2,8 +2,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { APIDomain } from "../../utils/APIDomains";
 export interface TUser {
-    id: number;
-    full_name: string;
+    userId: number;
+    full_Name: string;
     email: string;
     contact_phone: string;
     address: string;
