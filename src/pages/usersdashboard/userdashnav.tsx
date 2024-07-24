@@ -28,6 +28,7 @@ const userdashnavigation = () => {
           <span className="badge badge-sm indicator-item">8</span>
         </div>
       </div>
+{/*       
       <div
         tabIndex={0}
         className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow">
@@ -47,7 +48,7 @@ const userdashnavigation = () => {
             alt="Tailwind CSS Navbar component"
             src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
         </div>
-      </div>
+      </div> */}
 
       <Link to="userprofile">PROFILE</Link>
 
