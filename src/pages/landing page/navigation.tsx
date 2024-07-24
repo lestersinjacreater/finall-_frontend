@@ -46,10 +46,9 @@ const Navbar = () => {
             const response = await loginUser({ email, password }).unwrap();
             console.log('Login successful:', response);
 
-            console.log('Token:', response.token);
-
-            // Store the token in local storage
+            // Store the token and user ID in local storage
             localStorage.setItem('token', response.token);
+            localStorage.setItem('userId', response.userId.toString());
 
             setIsLoginVisible(false);
 
@@ -72,6 +71,7 @@ const Navbar = () => {
 
             // Automatically log in after successful registration
             localStorage.setItem('token', response.token);
+            localStorage.setItem('userId', response.userId);
 
             setIsRegisterVisible(false);
             setIsLoginVisible(false);
