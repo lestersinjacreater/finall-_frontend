@@ -105,35 +105,35 @@ const Booking: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label>
+        <form onSubmit={handleSubmit} style={{ backgroundColor: '#1f1f1f', padding: '2rem', borderRadius: '0.5rem' }}>
+            <label style={{ color: '#f0f0f0', display: 'block', marginBottom: '1rem' }}>
                 Booking Date
-                <input type="date" name="bookingDate" value={formFields.bookingDate} onChange={handleChange} required />
+                <input type="date" name="bookingDate" value={formFields.bookingDate} onChange={handleChange} required style={{ backgroundColor: '#2f2f2f', color: '#f0f0f0', border: 'none', padding: '0.5rem', borderRadius: '0.25rem', width: '100%' }} />
             </label>
-            <label>
+            <label style={{ color: '#f0f0f0', display: 'block', marginBottom: '1rem' }}>
                 Return Date
-                <input type="date" name="returnDate" value={formFields.returnDate} onChange={handleChange} required />
+                <input type="date" name="returnDate" value={formFields.returnDate} onChange={handleChange} required style={{ backgroundColor: '#2f2f2f', color: '#f0f0f0', border: 'none', padding: '0.5rem', borderRadius: '0.25rem', width: '100%' }} />
             </label>
-            <label>
+            <label style={{ color: '#f0f0f0', display: 'block', marginBottom: '1rem' }}>
                 Total Amount
-                <input type="text" name="totalAmount" value={formFields.totalAmount} readOnly />
+                <input type="text" name="totalAmount" value={formFields.totalAmount} readOnly style={{ backgroundColor: '#2f2f2f', color: '#f0f0f0', border: 'none', padding: '0.5rem', borderRadius: '0.25rem', width: '100%' }} />
             </label>
-            <label>
+            <label style={{ color: '#f0f0f0', display: 'block', marginBottom: '1rem' }}>
                 Location Name
-                <input type="text" name="locationName" value={formFields.locationName} onChange={handleChange} required />
+                <input type="text" name="locationName" value={formFields.locationName} onChange={handleChange} required style={{ backgroundColor: '#2f2f2f', color: '#f0f0f0', border: 'none', padding: '0.5rem', borderRadius: '0.25rem', width: '100%' }} />
             </label>
-            <label>
+            <label style={{ color: '#f0f0f0', display: 'block', marginBottom: '1rem' }}>
                 Address
-                <input type="text" name="address" value={formFields.address} onChange={handleChange} required />
+                <input type="text" name="address" value={formFields.address} onChange={handleChange} required style={{ backgroundColor: '#2f2f2f', color: '#f0f0f0', border: 'none', padding: '0.5rem', borderRadius: '0.25rem', width: '100%' }} />
             </label>
-            <label>
+            <label style={{ color: '#f0f0f0', display: 'block', marginBottom: '1rem' }}>
                 Contact Phone
-                <input type="tel" name="contactPhone" value={formFields.contactPhone} onChange={handleChange} required />
+                <input type="tel" name="contactPhone" value={formFields.contactPhone} onChange={handleChange} required style={{ backgroundColor: '#2f2f2f', color: '#f0f0f0', border: 'none', padding: '0.5rem', borderRadius: '0.25rem', width: '100%' }} />
             </label>
-            <button type="submit" disabled={isSubmitting}>
+            <button type="submit" disabled={isSubmitting} style={{ backgroundColor: '#4a4a4a', color: '#f0f0f0', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.25rem', cursor: 'pointer', fontSize: '1rem' }}>
                 {isSubmitting ? 'Submitting...' : 'Proceed to Payment'}
             </button>
-            {error && <div>{error}</div>}
+            {error && <div style={{ color: '#ff6b6b', marginTop: '1rem' }}>{error}</div>}
         </form>
     );
 };
