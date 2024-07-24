@@ -10,6 +10,7 @@ import { store, persistor } from './app/store.ts';
 import LandingPage from './pages/landingpage.tsx';
 import Error from './pages/error.tsx';
 import Timelinepage from './pages/timelinepage/timelinepage.tsx';
+import Profile from './pages/userprofile/userprofile.tsx'
 
 import Booking from './pages/bookings/bookings.tsx';
 import Userdashboard from './pages/usersdashboard/usersdashboard.tsx';
@@ -18,6 +19,7 @@ import PaymentSuccess  from './pages/bookings/booking.sucsess.tsx';
 import PaymentFailure from './pages/bookings/booking.failed.tsx';
 import Payments from './pages/usersdashboard/payments.tsx';
 
+import Profile from './pages/userprofile/userprofile.tsx'
 
 import Admindashboard from './pages/admindashboard/admin dasboard.tsx';
 import Allbookings from './pages/admindashboard/all booking.tsx';
@@ -102,6 +104,12 @@ const router = createBrowserRouter([
 {
   path: '/ManageUsers',
   element: <ManageUsers/>,
+  errorElement: <Error/>
+
+},
+{
+  path: '/Profile',
+  element: <Profile/>,
   errorElement: <Error/>
 
 },
