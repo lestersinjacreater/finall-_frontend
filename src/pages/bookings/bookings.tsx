@@ -185,7 +185,7 @@ const Booking: React.FC = () => {
             type="text"
             id="totalAmount"
             name="totalAmount"
-            value={formFields.totalAmount}
+            value={formFields.totalAmount.toString()} // Ensure totalAmount is displayed as string
             readOnly
             className="border border-gray-300 rounded-md px-4 py-2 w-full bg-gray-100"
           />
