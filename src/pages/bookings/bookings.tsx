@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { bookingAPI } from '../../features/booking/booking.api';
 import { paymentAPI } from '../../features/payments/payments.api';
 import { loadStripe } from '@stripe/stripe-js';
@@ -64,20 +64,21 @@ const Booking: React.FC = () => {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
+  // Update total amount whenever bookingDate, returnDate, or rentalRate changes
+  useEffect(() => {
+    if (formFields.bookingDate && formFields.returnDate) {
+      const days = calculateDaysBetween(formFields.bookingDate, formFields.returnDate);
+      setFormFields((prevFields) => ({
+        ...prevFields,
+        totalAmount: days * prevFields.rentalRate,
+      }));
+    }
+  }, [formFields.bookingDate, formFields.returnDate, formFields.rentalRate]);
+
   // Handle form field changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormFields((prevFields) => {
-      const updatedFields = { ...prevFields, [name]: value };
-      if (name === 'bookingDate' || name === 'returnDate') {
-        const { bookingDate, returnDate, rentalRate } = updatedFields;
-        if (bookingDate && returnDate) {
-          const days = calculateDaysBetween(bookingDate, returnDate);
-          updatedFields.totalAmount = days * rentalRate;
-        }
-      }
-      return updatedFields;
-    });
+    setFormFields((prevFields) => ({ ...prevFields, [name]: value }));
   };
 
   // Handle form submission
