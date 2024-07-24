@@ -10,7 +10,7 @@ import { usersAPI } from '../features/users/user.api';
 import { loginAPI } from '../features/authentication/login.api';
 import { registerAPI } from '../features/authentication/register.api';
 import { VehicleAPI } from '../features/vehicles/vehiclesandspecifications.api';
-import { bookingAPI } from '../features/booking/booking.api';
+import { BookingAPI } from '../features/booking/booking.api';
 import { paymentAPI } from '../features/payments/payments.api';
 import { customerSupportAPI}  from'../features/customer support tickets/customersupport.api';
 import { notificationsAPI } from '../features/notifications/notifications.api';
@@ -30,7 +30,7 @@ const rootReducer = combineReducers({
     [loginAPI.reducerPath]: loginAPI.reducer,
     [registerAPI.reducerPath]: registerAPI.reducer,
     [VehicleAPI.reducerPath]: VehicleAPI.reducer,
-    [bookingAPI.reducerPath]: bookingAPI.reducer,
+    [BookingAPI .reducerPath]: BookingAPI .reducer,
     [paymentAPI.reducerPath]: paymentAPI.reducer,
     [customerSupportAPI.reducerPath]: customerSupportAPI.reducer,
     [notificationsAPI.reducerPath]: notificationsAPI.reducer,
@@ -54,7 +54,7 @@ export const store = configureStore({
             .concat(usersAPI.middleware)
             .concat(loginAPI.middleware)
             .concat(registerAPI.middleware)
-            .concat(bookingAPI.middleware)
+            .concat(BookingAPI .middleware)
             .concat(VehicleAPI.middleware)
             .concat(paymentAPI.middleware)
             .concat(customerSupportAPI.middleware)

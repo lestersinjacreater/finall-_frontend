@@ -1,85 +1,152 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// Define the interface for Booking
-export interface Booking {
-  bookingId: number;
-  userId: number;
-  vehicleId: number;
-  locationId: number;  // Include locationId if needed
-  bookingDate: string;
-  returnDate: string;
-  totalAmount: number;
-  bookingStatus: 'Pending' | 'Confirmed' | 'Cancelled';
-  createdAt: string;
-  updatedAt: string;
+ export interface Booking {
+  locationId: number;
+    createdAt: any;
+    updatedAt: any;
+    vehicleId: number;
+    userId: number; // Corrected typo from useId to userId
+    bookingId: number;
+    bookingDate: string;
+    returnDate: string;
+    totalAmount: number;
+    bookingStatus: string;
+    locationName: string; // New field
+    address: string; // New field
+    contactPhone: string; // New field
+    
+    
 }
 
-// Define the response type for creating a booking
-export interface CreateBookingResponse {
-  bookingId: number; // Ensure bookingId is included in the response
-  message: string;   // Optional: Include a message for confirmation
-}
-
-// Define the bookingAPI with RTK Query
-export const bookingAPI = createApi({
-  reducerPath: 'bookingAPI', // Unique key to store the reducer in the Redux store
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://drill-wheel-rental-system-backend.onrender.com/api' }), // Base URL for API requests
-  endpoints: (builder) => ({
-    createBooking: builder.mutation<CreateBookingResponse, Partial<Booking>>({
-      query: (newBooking) => ({
-        url: '/bookings',
-        method: 'POST',
-        body: newBooking,
-      }),
-      async onQueryStarted(_arg, { queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          if (data && data.bookingId) {
-            console.log('Booking ID:', data.bookingId);
-          } else {
-            console.error('Unexpected response format:', data);
-          }
-        } catch (error) {
-          console.error('Error during booking creation:', error);
-        }
-      },
+export const BookingAPI = createApi({
+    reducerPath: 'bookingAPI',
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://final-project-hono.onrender.com/' }),
+    endpoints: (builder) => ({
+        getBooking: builder.query<Booking[], void>({
+            query: () => 'Bookings',
+            //  providesTags: ['getUsersTag'],
+        }),
+        createBookings: builder.mutation<Booking, Partial<Booking>>({
+            query: (newBooking) => ({
+                url: 'Bookings',
+                method: 'POST',
+                body: newBooking,
+                providesTags: ['createBookingTags'],
+            }),
+           // invalidatesTags: ['getUsersTag'],
+        }),
+        deleteBooking: builder.mutation<{ success: boolean }, number>({
+            query: (id) => ({
+                url: `Bookings/${id}`,
+                method: 'DELETE',
+                providesTags: ['deleteBookingTags'],
+            }),
+           // invalidatesTags: ['getUsersTag'],
+        }),
+        updateBooking: builder.mutation<Booking, Partial<Booking>>({
+            query: ({ bookingId, ...rest }) => ({
+                url: `Bookings/${bookingId}`,
+                method: 'PUT',
+                body: rest,
+                providesTags: ['updateBookingTags'],
+            }),
+           // invalidatesTags: ['getUsersTag'],
+        }),
     }),
-
-    getBookingById: builder.query<Booking, number>({
-      query: (id) => `/bookings/${id}`, // API endpoint for fetching a booking by ID
-    }),
-
-    updateBooking: builder.mutation<Booking, { id: number; data: Partial<Booking> }>({
-      query: ({ id, data }) => ({
-        url: `/bookings/${id}`, // API endpoint for updating a booking
-        method: 'PUT', // HTTP method
-        body: data, // Request body
-      }),
-    }),
-
-    deleteBooking: builder.mutation<void, number>({
-      query: (id) => ({
-        url: `/bookings/${id}`, // API endpoint for deleting a booking
-        method: 'DELETE', // HTTP method
-      }),
-    }),
-
-    getAllBookings: builder.query<Booking[], void>({
-      query: () => '/bookings', // API endpoint for fetching all bookings
-    }),
-
-    getBookingsByUserId: builder.query<Booking[], number>({
-      query: (userId) => `/bookings/user/${userId}`, // API endpoint for fetching bookings by user ID
-    }),
-  }),
 });
 
-// // Export hooks for usage in functional components
-// export const { 
-//   useCreateBookingMutation, 
-//   useGetBookingByIdQuery, 
-//   useUpdateBookingMutation, 
-//   useDeleteBookingMutation, 
-//   useGetAllBookingsQuery, 
-//   useGetBookingsByUserIdQuery 
-// } = bookingAPI;
+// export const { useGetBookingQuery, useCreateBookingsMutation, useDeleteBookingMutation, useUpdateBookingMutation } = BookingAPI;
+
+
+
+
+
+
+
+
+
+// import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
+// // Define the interface for Booking
+// export interface Booking {
+//   bookingId: number;
+//   userId: number;
+//   vehicleId: number;
+//   locationId: number;  // Include locationId if needed
+//   bookingDate: string;
+//   returnDate: string;
+//   totalAmount: number;
+//   bookingStatus: 'Pending' | 'Confirmed' | 'Cancelled';
+//   createdAt: string;
+//   updatedAt: string;
+// }
+
+// // Define the response type for creating a booking
+// export interface CreateBookingResponse {
+//   bookingId: number; // Ensure bookingId is included in the response
+//   message: string;   // Optional: Include a message for confirmation
+// }
+
+// // Define the bookingAPI with RTK Query
+// export const bookingAPI = createApi({
+//   reducerPath: 'bookingAPI', // Unique key to store the reducer in the Redux store
+//   baseQuery: fetchBaseQuery({ baseUrl: 'https://drill-wheel-rental-system-backend.onrender.com/api' }), // Base URL for API requests
+//   endpoints: (builder) => ({
+//     createBooking: builder.mutation<CreateBookingResponse, Partial<Booking>>({
+//       query: (newBooking) => ({
+//         url: '/bookings',
+//         method: 'POST',
+//         body: newBooking,
+//       }),
+//       async onQueryStarted(_arg, { queryFulfilled }) {
+//         try {
+//           const { data } = await queryFulfilled;
+//           if (data && data.bookingId) {
+//             console.log('Booking ID:', data.bookingId);
+//           } else {
+//             console.error('Unexpected response format:', data);
+//           }
+//         } catch (error) {
+//           console.error('Error during booking creation:', error);
+//         }
+//       },
+//     }),
+
+//     getBookingById: builder.query<Booking, number>({
+//       query: (id) => `/bookings/${id}`, // API endpoint for fetching a booking by ID
+//     }),
+
+//     updateBooking: builder.mutation<Booking, { id: number; data: Partial<Booking> }>({
+//       query: ({ id, data }) => ({
+//         url: `/bookings/${id}`, // API endpoint for updating a booking
+//         method: 'PUT', // HTTP method
+//         body: data, // Request body
+//       }),
+//     }),
+
+//     deleteBooking: builder.mutation<void, number>({
+//       query: (id) => ({
+//         url: `/bookings/${id}`, // API endpoint for deleting a booking
+//         method: 'DELETE', // HTTP method
+//       }),
+//     }),
+
+//     getAllBookings: builder.query<Booking[], void>({
+//       query: () => '/bookings', // API endpoint for fetching all bookings
+//     }),
+
+//     getBookingsByUserId: builder.query<Booking[], number>({
+//       query: (userId) => `/bookings/user/${userId}`, // API endpoint for fetching bookings by user ID
+//     }),
+//   }),
+// });
+
+// // // Export hooks for usage in functional components
+// // export const { 
+// //   useCreateBookingMutation, 
+// //   useGetBookingByIdQuery, 
+// //   useUpdateBookingMutation, 
+// //   useDeleteBookingMutation, 
+// //   useGetAllBookingsQuery, 
+// //   useGetBookingsByUserIdQuery 
+// // } = bookingAPI;

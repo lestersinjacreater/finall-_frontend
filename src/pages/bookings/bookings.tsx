@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { bookingAPI } from '../../features/booking/booking.api'; // Import the booking API
+import { BookingAPI } from '../../features/booking/booking.api'; // Import the booking API
 
 // Initialize Stripe with your public key
 const stripePromise = loadStripe('pk_test_51PfLsj2MixLHpnNSRGgtzO9CCu1gmQcMocDfPy7k7csSKkTBs5YmpDqzK7BgLMisuOFjbrv26nMPxex3pjUwQ9gO00ctq4Xp1A');
@@ -25,18 +25,21 @@ const Booking: React.FC = () => {
     if (token) {
       try {
         const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        console.log('Decoded token:', decodedToken);
         return decodedToken.userId;
-      } catch {
+      } catch (error) {
+        console.error('Invalid token:', error);
         throw new Error('Invalid token');
       }
     }
+    console.error('No token found');
     throw new Error('No token found');
-    console.log ('User ID:', getUserIdFromToken());
   };
 
   // Retrieve vehicle ID and rental rate from localStorage
   const vehicleId = parseInt(localStorage.getItem('vehicleId') || '0', 10);
   const rentalRate = parseFloat(localStorage.getItem('rentalRate') || '0');
+  console.log('Vehicle ID:', vehicleId, 'Rental Rate:', rentalRate);
 
   // State for form fields, including user and vehicle information
   const [formFields, setFormFields] = useState<BookingFormFields>({
@@ -50,13 +53,14 @@ const Booking: React.FC = () => {
     contactPhone: '',
     rentalRate: rentalRate,
   });
+  console.log('Initial form fields:', formFields);
 
   // State to manage form submission status and error messages
-  const [, setIsSubmitting] = useState(false);
-  const [, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Use the mutation hook from the booking API slice for creating bookings
-  const [createBooking] = bookingAPI.useCreateBookingMutation();
+  const [createBooking] = BookingAPI.useCreateBookingsMutation();
 
   // Function to calculate the number of days between two dates
   const calculateDaysBetween = (startDate: string, endDate: string): number => {
@@ -64,7 +68,6 @@ const Booking: React.FC = () => {
     const end = new Date(endDate);
     const diffTime = Math.abs(end.getTime() - start.getTime());
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
   };
 
   // Effect hook to calculate total amount whenever booking or return dates change
@@ -74,13 +77,20 @@ const Booking: React.FC = () => {
       setFormFields((prevFields) => ({
         ...prevFields,
         totalAmount: days * prevFields.rentalRate,
-        console,
       }));
-      console.log('Total amount:', days * formFields.rentalRate);
+      console.log('Total amount calculated:', days * formFields.rentalRate);
     }
   }, [formFields.bookingDate, formFields.returnDate, formFields.rentalRate]);
 
   // Handler for form field changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormFields((prevFields) => ({
+      ...prevFields,
+      [name]: value,
+    }));
+    console.log('Form field changed:', name, value);
+  };
 
   // Handler for form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,10 +100,41 @@ const Booking: React.FC = () => {
     console.log('Submitting booking form:', formFields);
 
     try {
-      console.log('Submitting booking form:', formFields);
-
       // Perform the API call to create a booking
       const response = await createBooking(formFields).unwrap();
+      console.log('Booking response:', response);
+
+      if (!response || !response.bookingId) {
+        throw new Error('Booking ID is undefined or response is invalid');
+      }
+
+      // Initialize Stripe and redirect to checkout
+      const stripe = await stripePromise;
+      if (stripe) {
+        await stripe.redirectToCheckout({ sessionId: response.bookingId.toString() });
+        console.log('Redirecting to checkout with sessionId:', response.bookingId);
+      } else {
+        console.error('Stripe initialization failed');
+        setError('Stripe failed to initialize');
+      }
+    } catch (error: any) {
+      console.error('Error during booking and payment process:', error);
+      setError(error.message || 'Something went wrong');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Handler for "Proceed to Pay" button
+  const handleProceedToPay = async () => {
+    setIsSubmitting(true);
+    setError(null);
+    console.log('Proceeding to pay with form fields:', formFields);
+
+    try {
+      // Perform the API call to create a booking
+      const response = await createBooking(formFields).unwrap();
+      console.log('Booking response:', response);
 
       if (!response || !response.bookingId) {
         throw new Error('Booking ID is undefined or response is invalid');
@@ -121,8 +162,29 @@ const Booking: React.FC = () => {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
         <h1 className="text-3xl font-bold mb-6 text-gray-800">Book the vehicle</h1>
-        {/* Form fields for booking, return dates, total amount, location, address, and contact phone */}
-        {/* Submit button with dynamic text based on submission status and error message display */}
+        <div>
+          <label>Booking Date:</label>
+          <input type="date" name="bookingDate" value={formFields.bookingDate} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>Return Date:</label>
+          <input type="date" name="returnDate" value={formFields.returnDate} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>Location Name:</label>
+          <input type="text" name="locationName" value={formFields.locationName} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>Address:</label>
+          <input type="text" name="address" value={formFields.address} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>Contact Phone:</label>
+          <input type="text" name="contactPhone" value={formFields.contactPhone} onChange={handleChange} required />
+        </div>
+        <button type="submit" disabled={isSubmitting}>Create Booking</button>
+        <button type="button" onClick={handleProceedToPay} disabled={isSubmitting}>Proceed to Pay</button>
+        {error && <p className="text-red-500 mt-4">{error}</p>}
       </form>
     </div>
   );
