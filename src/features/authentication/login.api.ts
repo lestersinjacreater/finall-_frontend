@@ -29,9 +29,10 @@ export const loginAPI = createApi({
                 method: 'POST',
                 body: user,
             }),
-            // Handle successful login by storing token in local storage
+            // Handle successful login by storing token and userId in local storage
             transformResponse: (response: LoggedInUser) => {
                 localStorage.setItem('jwtToken', response.token);
+                localStorage.setItem('userId', response.userId);
                 return response;
             }
         }),
@@ -44,9 +45,10 @@ export const loginAPI = createApi({
                     'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
                 }
             }),
-            // Clear the token from local storage on logout
+            // Clear the token and userId from local storage on logout
             transformResponse: () => {
                 localStorage.removeItem('jwtToken');
+                localStorage.removeItem('userId');
             }
         }),
         getAllLoggedInUsers: builder.query<LoggedInUser[], void>({

@@ -47,7 +47,7 @@ const Navbar = () => {
             console.log('Login successful:', response);
 
             // Store the token and user ID in local storage
-            localStorage.setItem('token', response.token);
+            localStorage.setItem('jwtToken', response.token);
             localStorage.setItem('userId', response.userId);
 
             setIsLoginVisible(false);
@@ -70,7 +70,7 @@ const Navbar = () => {
             console.log('Registration successful:', response);
 
             // Automatically log in after successful registration
-            localStorage.setItem('token', response.token);
+            localStorage.setItem('jwtToken', response.token);
             localStorage.setItem('userId', response.userId);
 
             setIsRegisterVisible(false);
@@ -144,13 +144,13 @@ const Navbar = () => {
                             <button type="submit" className="btn bg-black text-white w-full" disabled={isLoginLoading}>
                                 {isLoginLoading ? 'Logging in...' : 'Login'}
                             </button>
-                            {loginError && <p className="text-red-500 mt-2">Failed to login. Please try again.</p>}
+                            {loginError && <p className="text-red-500 mt-2">{(loginError as any).data.message}</p>}
                         </form>
                     </div>
                 </div>
             )}
 
-            {/* Register Modal */}
+            {/* Registration Modal */}
             {isRegisterVisible && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50 modal-background" onClick={handleModalClick}>
                     <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
@@ -159,11 +159,10 @@ const Navbar = () => {
                             <InputField label="Full Name" type="text" name="fullName" placeholder="Full Name" required />
                             <InputField label="Email Address" type="email" name="email" placeholder="Email" required />
                             <InputField label="Password" type="password" name="password" placeholder="Password" required />
-                            <InputField label="Confirm Password" type="password" name="confirmPassword" placeholder="Confirm Password" required />
                             <button type="submit" className="btn bg-black text-white w-full" disabled={isRegisterLoading}>
                                 {isRegisterLoading ? 'Registering...' : 'Register'}
                             </button>
-                            {registerError && <p className="text-red-500 mt-2">Failed to register. Please try again.</p>}
+                            {registerError && <p className="text-red-500 mt-2">{(registerError as any).data.message}</p>}
                         </form>
                     </div>
                 </div>
