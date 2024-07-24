@@ -86,7 +86,7 @@ const Booking: React.FC = () => {
       console.log('Submitting booking form:', formFields); // Debug form submission
 
       // Create a booking first
-      const bookingResponse = await fetch('https://drill-wheel-rental-system-backend.onrender.com/api/bookings', {
+      const bookingResponse = await fetch('http://localhost:3000/api/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -185,7 +185,7 @@ const Booking: React.FC = () => {
             type="text"
             id="totalAmount"
             name="totalAmount"
-            value={formFields.totalAmount.toString()} // Ensure totalAmount is displayed as string
+            value={formFields.totalAmount}
             readOnly
             className="border border-gray-300 rounded-md px-4 py-2 w-full bg-gray-100"
           />
