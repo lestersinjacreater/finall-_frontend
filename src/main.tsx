@@ -13,7 +13,7 @@ import Timelinepage from './pages/timelinepage/timelinepage.tsx';
 import Booking from './pages/bookings/bookings.tsx';
 import Userdashboard from './pages/usersdashboard/usersdashboard.tsx';
 import Admindashboard from './pages/admindashboard/admin dasboard.tsx';
-//import BookingsHistory from './pages/usersdashboard/bookinghistory.tsx';
+import BookingsHistory from './pages/usersdashboard/bookinghistory.tsx';
 import PaymentSuccess  from './pages/bookings/booking.sucsess.tsx';
 import PaymentFailure from './pages/bookings/booking.failed.tsx';
 
@@ -51,19 +51,19 @@ const router = createBrowserRouter([
     path: '/userdashboard',
     element: <Userdashboard />,
     errorElement: <Error />,
-    children: [
-      // { path: '/bookinghistory', 
-      //   element: <BookingsHistory />
-      //  },
-      ]
+    
   },
+  {  
+  path: '/bookinghistory',
+  element: <BookingsHistory />,
+  errorElement: <Error />
+},
+
   {
     path: '/admindashboard',
     element: <Admindashboard />,
     errorElement: <Error />
-
-
-  },
+ },
 
   
   
