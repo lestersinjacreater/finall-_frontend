@@ -48,6 +48,7 @@ const Booking: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Use the mutation hook from the API slice
   const [createBooking] = bookingAPI.useCreateBookingMutation();
 
   const calculateDaysBetween = (startDate: string, endDate: string): number => {
@@ -80,18 +81,18 @@ const Booking: React.FC = () => {
     try {
       console.log('Submitting booking form:', formFields);
 
+      // Perform the API call to create a booking
       const response = await createBooking(formFields).unwrap();
-      const data = response.data;
-      console.log('Booking Response:', data);
 
-      if (!data || !data.bookingId) {
+      if (!response || !response.bookingId) {
         throw new Error('Booking ID is undefined or response is invalid');
       }
 
+      // Initialize Stripe and redirect to checkout
       const stripe = await stripePromise;
       if (stripe) {
-        await stripe.redirectToCheckout({ sessionId: data.bookingId });
-        console.log('Redirecting to checkout with sessionId:', data.bookingId);
+        await stripe.redirectToCheckout({ sessionId: response.bookingId.toString() });
+        console.log('Redirecting to checkout with sessionId:', response.bookingId);
       } else {
         console.error('Stripe initialization failed');
         setError('Stripe failed to initialize');
