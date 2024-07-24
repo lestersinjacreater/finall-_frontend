@@ -54,5 +54,10 @@ export const paymentAPI = createApi({
             }),
             invalidatesTags: ['Payment'],
         }),
+        //define the endpoint for fetching  payments by user id
+        getPaymentsByUserId: builder.query<Payment[], number>({
+            query: (userId) => `payments/user/${userId}`,
+            providesTags: ['Payment'],
+        }),
     }),
 });

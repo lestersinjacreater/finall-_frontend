@@ -16,6 +16,7 @@ import Admindashboard from './pages/admindashboard/admin dasboard.tsx';
 import BookingsHistory from './pages/usersdashboard/bookinghistory.tsx';
 import PaymentSuccess  from './pages/bookings/booking.sucsess.tsx';
 import PaymentFailure from './pages/bookings/booking.failed.tsx';
+import Payments from './pages/usersdashboard/payments.tsx';
 
 
 // components
@@ -59,11 +60,17 @@ const router = createBrowserRouter([
   errorElement: <Error />
 },
 
-  {
-    path: '/admindashboard',
-    element: <Admindashboard />,
-    errorElement: <Error />
- },
+{
+  path: '/admindashboard',
+  element: <Admindashboard />,
+  errorElement: <Error />
+},
+{
+  path: '/payments',
+  element: <Payments />,
+  errorElement: <Error />
+},
+
 
   
   
