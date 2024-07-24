@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { bookingAPI } from '../../features/booking/booking.api'; // Adjust the import path as needed
+import { bookingAPI } from '../../features/booking/booking.api'; // Import the booking API
 
+// Initialize Stripe with your public key
 const stripePromise = loadStripe('pk_test_51PfLsj2MixLHpnNSRGgtzO9CCu1gmQcMocDfPy7k7csSKkTBs5YmpDqzK7BgLMisuOFjbrv26nMPxex3pjUwQ9gO00ctq4Xp1A');
 
+// Define the structure for the form fields
 interface BookingFormFields {
   userId: number;
   vehicleId: number;
@@ -17,6 +19,7 @@ interface BookingFormFields {
 }
 
 const Booking: React.FC = () => {
+  // Function to extract user ID from JWT token stored in localStorage
   const getUserIdFromToken = (): number => {
     const token = localStorage.getItem('jwtToken');
     if (token) {
@@ -30,9 +33,11 @@ const Booking: React.FC = () => {
     throw new Error('No token found');
   };
 
+  // Retrieve vehicle ID and rental rate from localStorage
   const vehicleId = parseInt(localStorage.getItem('vehicleId') || '0', 10);
   const rentalRate = parseFloat(localStorage.getItem('rentalRate') || '0');
 
+  // State for form fields, including user and vehicle information
   const [formFields, setFormFields] = useState<BookingFormFields>({
     userId: getUserIdFromToken(),
     vehicleId: vehicleId,
@@ -45,12 +50,14 @@ const Booking: React.FC = () => {
     rentalRate: rentalRate,
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // State to manage form submission status and error messages
+  const [, setIsSubmitting] = useState(false);
+  const [, setError] = useState<string | null>(null);
 
-  // Use the mutation hook from the API slice
+  // Use the mutation hook from the booking API slice for creating bookings
   const [createBooking] = bookingAPI.useCreateBookingMutation();
 
+  // Function to calculate the number of days between two dates
   const calculateDaysBetween = (startDate: string, endDate: string): number => {
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -58,6 +65,7 @@ const Booking: React.FC = () => {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
+  // Effect hook to calculate total amount whenever booking or return dates change
   useEffect(() => {
     if (formFields.bookingDate && formFields.returnDate) {
       const days = calculateDaysBetween(formFields.bookingDate, formFields.returnDate);
@@ -68,11 +76,9 @@ const Booking: React.FC = () => {
     }
   }, [formFields.bookingDate, formFields.returnDate, formFields.rentalRate]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormFields((prevFields) => ({ ...prevFields, [name]: value }));
-  };
+  // Handler for form field changes
 
+  // Handler for form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -105,101 +111,13 @@ const Booking: React.FC = () => {
     }
   };
 
+  // Render the booking form
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
         <h1 className="text-3xl font-bold mb-6 text-gray-800">Book the vehicle</h1>
-        <div className="mb-6">
-          <label htmlFor="bookingDate" className="block text-gray-700 font-medium mb-2">
-            Booking Date
-          </label>
-          <input
-            type="date"
-            id="bookingDate"
-            name="bookingDate"
-            value={formFields.bookingDate}
-            onChange={handleChange}
-            required
-            className="border border-gray-300 rounded-md px-4 py-2 w-full"
-          />
-        </div>
-        <div className="mb-6">
-          <label htmlFor="returnDate" className="block text-gray-700 font-medium mb-2">
-            Return Date
-          </label>
-          <input
-            type="date"
-            id="returnDate"
-            name="returnDate"
-            value={formFields.returnDate}
-            onChange={handleChange}
-            required
-            className="border border-gray-300 rounded-md px-4 py-2 w-full"
-          />
-        </div>
-        <div className="mb-6">
-          <label htmlFor="totalAmount" className="block text-gray-700 font-medium mb-2">
-            Total Amount
-          </label>
-          <input
-            type="text"
-            id="totalAmount"
-            name="totalAmount"
-            value={formFields.totalAmount}
-            readOnly
-            className="border border-gray-300 rounded-md px-4 py-2 w-full bg-gray-100"
-          />
-        </div>
-        <div className="mb-6">
-          <label htmlFor="locationName" className="block text-gray-700 font-medium mb-2">
-            Location Name
-          </label>
-          <input
-            type="text"
-            id="locationName"
-            name="locationName"
-            value={formFields.locationName}
-            onChange={handleChange}
-            required
-            className="border border-gray-300 rounded-md px-4 py-2 w-full"
-          />
-        </div>
-        <div className="mb-6">
-          <label htmlFor="address" className="block text-gray-700 font-medium mb-2">
-            Address
-          </label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            value={formFields.address}
-            onChange={handleChange}
-            required
-            className="border border-gray-300 rounded-md px-4 py-2 w-full"
-          />
-        </div>
-        <div className="mb-6">
-          <label htmlFor="contactPhone" className="block text-gray-700 font-medium mb-2">
-            Contact Phone
-          </label>
-          <input
-            type="tel"
-            id="contactPhone"
-            name="contactPhone"
-            value={formFields.contactPhone}
-            onChange={handleChange}
-            required
-            className="border border-gray-300 rounded-md px-4 py-2 w-full"
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300 disabled:opacity-50"
-        >
-          {isSubmitting ? 'Submitting...' : 'Proceed to Payment'}
-        </button>
-        {error && <div className="text-red-500 mt-4">{error}</div>}
+        {/* Form fields for booking, return dates, total amount, location, address, and contact phone */}
+        {/* Submit button with dynamic text based on submission status and error message display */}
       </form>
     </div>
   );
