@@ -10,13 +10,26 @@ import { store, persistor } from './app/store.ts';
 import LandingPage from './pages/landingpage.tsx';
 import Error from './pages/error.tsx';
 import Timelinepage from './pages/timelinepage/timelinepage.tsx';
+
 import Booking from './pages/bookings/bookings.tsx';
 import Userdashboard from './pages/usersdashboard/usersdashboard.tsx';
-import Admindashboard from './pages/admindashboard/admin dasboard.tsx';
 import BookingsHistory from './pages/usersdashboard/bookinghistory.tsx';
 import PaymentSuccess  from './pages/bookings/booking.sucsess.tsx';
 import PaymentFailure from './pages/bookings/booking.failed.tsx';
 import Payments from './pages/usersdashboard/payments.tsx';
+
+
+import Admindashboard from './pages/admindashboard/admin dasboard.tsx';
+import Allbookings from './pages/admindashboard/all booking.tsx';
+import NotificationForm from  './pages/admindashboard/create.notification.tsx';
+import ManageLocations from './pages/admindashboard/manage locations.tsx';
+import ManageUsers from  './pages/admindashboard/managecustomers.tsx';
+
+
+
+
+
+
 
 
 // components
@@ -59,6 +72,12 @@ const router = createBrowserRouter([
   element: <BookingsHistory />,
   errorElement: <Error />
 },
+{
+  path: '/payments',
+  element: <Payments />,
+  errorElement: <Error />
+},
+
 
 {
   path: '/admindashboard',
@@ -66,10 +85,31 @@ const router = createBrowserRouter([
   errorElement: <Error />
 },
 {
-  path: '/payments',
-  element: <Payments />,
+  path: '/allbookings',
+  element: <Allbookings />,
   errorElement: <Error />
 },
+{
+  path: '/NotificationForm',
+  element: <NotificationForm/>,
+  errorElement: <Error />
+},
+{
+  path: '/ManageLocations',
+  element: <ManageLocations/>,
+  errorElement: <Error/>
+},
+{
+  path: '/ManageUsers',
+  element: <ManageUsers/>,
+  errorElement: <Error/>
+
+},
+
+
+
+
+
 
 
   
