@@ -18,7 +18,7 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('jwtToken');
     if (token) {
       try {
         const decoded: DecodedToken = jwtDecode(token);
@@ -61,7 +61,11 @@ const Profile = () => {
       }
     }
   };
-
+const handleLogout = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    localStorage.clear();
+    window.location.href = '/';
+};
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error fetching profile</div>;
 
@@ -110,7 +114,7 @@ const Profile = () => {
         </button>
       </form>
       <div>
-        <Link to="/logout">Logout</Link>
+        <Link to="/"  onClick={handleLogout}>Logout</Link>
       </div>
     </div>
   );

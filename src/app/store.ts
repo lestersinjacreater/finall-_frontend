@@ -16,6 +16,7 @@ import { customerSupportAPI}  from'../features/customer support tickets/customer
 import { notificationsAPI } from '../features/notifications/notifications.api';
 import { locationAPI } from '../features/locations/locations.api';
 import { profileAPI } from '../features/users/profile.api';
+import { stripeAPI } from '../features/stripe/stripeAPI';
 
 
 // Define persist configuration
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
     [notificationsAPI.reducerPath]: notificationsAPI.reducer,
     [locationAPI.reducerPath]: locationAPI.reducer,
     [profileAPI.reducerPath]: profileAPI.reducer,
+    [stripeAPI.reducerPath]: stripeAPI.reducer,
     user: userSlice,
     // Add additional reducers here as needed
     // [timelineAPI.reducerPath]: timelineAPI.reducer,
@@ -60,7 +62,8 @@ export const store = configureStore({
             .concat(customerSupportAPI.middleware)
             .concat(notificationsAPI.middleware)
             .concat(locationAPI.middleware)
-            .concat(profileAPI.middleware),
+            .concat(profileAPI.middleware)
+            .concat(stripeAPI.middleware),
             
 });
 

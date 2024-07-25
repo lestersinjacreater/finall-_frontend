@@ -20,15 +20,15 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const BookingAPI = createApi({
     reducerPath: 'bookingAPI',
-    baseQuery: fetchBaseQuery({ baseUrl: 'https://final-project-hono.onrender.com/' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://drill-wheel-rental-system-backend.onrender.com/api' }),
     endpoints: (builder) => ({
         getBooking: builder.query<Booking[], void>({
-            query: () => 'Bookings',
+            query: () => 'bookings',
             //  providesTags: ['getUsersTag'],
         }),
         createBookings: builder.mutation<Booking, Partial<Booking>>({
             query: (newBooking) => ({
-                url: 'Bookings',
+                url: 'bookings',
                 method: 'POST',
                 body: newBooking,
                 providesTags: ['createBookingTags'],
@@ -37,7 +37,7 @@ export const BookingAPI = createApi({
         }),
         deleteBooking: builder.mutation<{ success: boolean }, number>({
             query: (id) => ({
-                url: `Bookings/${id}`,
+                url: `bookings/${id}`,
                 method: 'DELETE',
                 providesTags: ['deleteBookingTags'],
             }),
@@ -45,7 +45,7 @@ export const BookingAPI = createApi({
         }),
         updateBooking: builder.mutation<Booking, Partial<Booking>>({
             query: ({ bookingId, ...rest }) => ({
-                url: `Bookings/${bookingId}`,
+                url: `bookings/${bookingId}`,
                 method: 'PUT',
                 body: rest,
                 providesTags: ['updateBookingTags'],
@@ -54,7 +54,7 @@ export const BookingAPI = createApi({
         }),
         //get bookings by user id
         getBookingByUserId: builder.query<Booking[], number>({
-            query: (userId) => `Bookings/user/${userId}`,
+            query: (userId) => `bookings/user/${userId}`,
             //  providesTags: ['getUsersTag'],
         }), 
     }),
