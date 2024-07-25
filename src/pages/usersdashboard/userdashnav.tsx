@@ -50,7 +50,7 @@ const userdashnavigation = () => {
         </div>
       </div> */}
 
-      <Link to="">PROFILE</Link>
+      <Link to="/profile">PROFILE</Link>
 
 
 
