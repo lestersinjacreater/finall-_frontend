@@ -18,7 +18,7 @@ const Navigationbar = () => {
             try {
                 // Decode the JWT token
                 const decodedToken = jwtDecode<DecodedToken>(token); // Call jwtDecode as a function with type assertion
-                
+                console.log('Decoded token:', decodedToken);
                 // Assuming the decoded token has a role property
                 if (decodedToken.role === 'admin') {
                     navigate('/admindashboard'); // Redirect to the admin dashboard
