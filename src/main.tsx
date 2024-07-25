@@ -22,6 +22,7 @@ import CustomerSupportTickets from './pages/usersdashboard/customer.support tick
 import Notifications from './pages/usersdashboard/notificatio.tsx';
 
 import Profile from './pages/userprofile/userprofile.tsx';
+import Logout from './features/authentication/logout.tsx';
 
 import Admindashboard from './pages/admindashboard/admin dasboard.tsx';
 import Allbookings from './pages/admindashboard/all booking.tsx';
@@ -146,6 +147,14 @@ const router = createBrowserRouter([
   errorElement: <Error/>
 
 },
+{
+  path: '/logout',
+  element: <Logout/>,
+  errorElement: <Error/>
+  
+},
+
+
 
 
 

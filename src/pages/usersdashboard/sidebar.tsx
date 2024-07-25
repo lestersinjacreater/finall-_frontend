@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
                     <li><Link to="/bookinghistory">BOOKING HISTORY</Link></li>
                     <li><Link to="/payments">PAYMENTS</Link></li>
                     <li><Link to="/customer.support tickets">CUSTOMER SUPPORT</Link></li>
-                    <li><Link to="notifications">NOTIFICATIONS</Link></li>
+                    <li><Link to="/notifications">NOTIFICATIONS</Link></li>
                 </ul>
             </div>
         </div>

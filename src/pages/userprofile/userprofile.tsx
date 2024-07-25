@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import {jwtDecode} from 'jwt-decode'; // Import jwt-decode
+import { jwtDecode } from 'jwt-decode'; // Import jwt-decode
 import { profileAPI } from '../../features/users/profile.api';
+import { Link } from 'react-router-dom'; // Import Link fro'; // Adjust the import path as necessary
 
 interface DecodedToken {
   userId: string;
@@ -108,10 +109,11 @@ const Profile = () => {
           {isUpdating ? 'Updating...' : 'Update Profile'}
         </button>
       </form>
+      <div>
+        <Link to="/logout">Logout</Link>
+      </div>
     </div>
   );
 };
-
-
 
 export default Profile;
