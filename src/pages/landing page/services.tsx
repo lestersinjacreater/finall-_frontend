@@ -12,21 +12,20 @@ const Services = () => {
             <div className="flex flex-wrap justify-center w-full"> {/* Use flexbox to arrange items horizontally */}
                 {/* Example Service Divs */}
                 <div className="m-4 p-4 bg-gray-200 rounded-lg shadow-md w-1/4"> {/* Adjust width as needed */}
-                    <h3 className="font-bold text-lg">Service 1</h3>
-                    <p>Description of Service 1.</p>
+                    <h3 className="font-bold text-lg">Short-Term Rentals</h3>
+                    <p>Renting vehicles for short durations, ranging from a few hours to a few days. This is ideal for tourists, business travelers, or individuals who need a car for a temporary period.</p>
                 </div>
                 <div className="m-4 p-4 bg-gray-200 rounded-lg shadow-md w-1/4"> {/* Adjust width as needed */}
-                    <h3 className="font-bold text-lg">Service 2</h3>
-                    <p>Description of Service 2.</p>
+                    <h3 className="font-bold text-lg">Long-Term Rentals:</h3>
+                    <p>Offering vehicle rentals for extended periods, such as weeks, months, or even years. This service is suitable for individuals who need a vehicle for a longer duration but do not want to commit to purchasing a car.</p>
+
                 </div>
                 <div className="m-4 p-4 bg-gray-200 rounded-lg shadow-md w-1/4"> {/* Adjust width as needed */}
-                    <h3 className="font-bold text-lg">Service 3</h3>
-                    <p>Description of Service 3.</p>
+                    <h3 className="font-bold text-lg">Chauffeur Services: </h3>
+                    <p>Offering vehicle rentals for extended periods, such as weeks, months, or even years. This service is suitable for individuals who need a vehicle for a longer duration but do not want to commit to purchasing a car.</p>
+
                 </div>
-                <div className="m-4 p-4 bg-gray-200 rounded-lg shadow-md w-1/4"> {/* Adjust width as needed */}
-                    <h3 className="font-bold text-lg">Service 4</h3>
-                    <p>Description of Service 4.</p>
-                </div>
+                
             </div>
         </div>
     );

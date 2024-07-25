@@ -21,8 +21,8 @@ const Vehicles = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {vehicles.map(({ vehicles }) => (
             <div key={vehicles.vehicleId} className="bg-white p-4 rounded-lg shadow-md">
-              <p className="mb-2"><strong>ID:</strong> {vehicles.vehicleId}</p>
-              <p className="mb-2"><strong>Rate:</strong> {vehicles.rentalRate}</p>
+              {/* <p className="mb-2"><strong>ID:</strong> {vehicles.vehicleId}</p> */}
+              <p className="mb-2"><strong>Rate:</strong>400</p>
               <p className="mb-4"><strong>Availability:</strong> {vehicles.availability ? 'Available' : 'Not Available'}</p>
               <button
                 onClick={() => handleSelectVehicle(vehicles.vehicleId, vehicles.rentalRate)}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode'; // Import jwt-decode
+import { jwtDecode } from 'jwt-decode'; // Import jwt-decode correctly
 import { profileAPI } from '../../features/users/profile.api';
-import { Link } from 'react-router-dom'; // Import Link fro'; // Adjust the import path as necessary
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 interface DecodedToken {
   userId: string;
@@ -16,6 +16,7 @@ const Profile = () => {
     contactPhone: '',
     address: '',
   });
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('jwtToken');
@@ -55,66 +56,82 @@ const Profile = () => {
     if (userId) {
       try {
         await updateProfile({ id: userId, newProfile: editProfile }).unwrap();
-        alert('Profile updated successfully!');
+        setSuccessMessage('Profile edit done!'); // Set success message
       } catch (err) {
-        alert('Failed to update profile.');
+        setSuccessMessage('Failed to update profile.');
       }
     }
   };
-const handleLogout = async (e: { preventDefault: () => void; }) => {
+
+  const handleLogout = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     localStorage.clear();
     window.location.href = '/';
-};
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error fetching profile</div>;
+  };
+
+  if (isLoading) return <div className="text-center mt-4 text-gray-500">Loading...</div>;
+  if (error) return <div className="text-center mt-4 text-red-500">Error fetching profile</div>;
 
   return (
-    <div>
-      <h2>Edit Profile</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Full Name</label>
+    <div className="min-h-screen bg-gray-900 text-gray-300 p-6 flex flex-col items-center">
+      <h2 className="text-3xl font-bold mb-6 text-white">Edit Profile</h2>
+      <form onSubmit={handleSubmit} className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-lg">
+        <div className="mb-4">
+          <label className="block text-gray-300 mb-2">Full Name</label>
           <input
             type="text"
             name="fullName"
             value={editProfile.fullName}
             onChange={handleChange}
+            className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
         </div>
-        <div>
-          <label>Email</label>
+        <div className="mb-4">
+          <label className="block text-gray-300 mb-2">Email</label>
           <input
             type="email"
             name="email"
             value={editProfile.email}
             onChange={handleChange}
+            className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
         </div>
-        <div>
-          <label>Contact Phone</label>
+        <div className="mb-4">
+          <label className="block text-gray-300 mb-2">Contact Phone</label>
           <input
             type="text"
             name="contactPhone"
             value={editProfile.contactPhone}
             onChange={handleChange}
+            className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
         </div>
-        <div>
-          <label>Address</label>
+        <div className="mb-4">
+          <label className="block text-gray-300 mb-2">Address</label>
           <input
             type="text"
             name="address"
             value={editProfile.address}
             onChange={handleChange}
+            className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
         </div>
-        <button type="submit" disabled={isUpdating}>
+        <button
+          type="submit"
+          disabled={isUpdating}
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 disabled:bg-blue-300"
+        >
           {isUpdating ? 'Updating...' : 'Update Profile'}
         </button>
+        {successMessage && (
+          <div className="mt-4 text-center text-green-500">
+            {successMessage}
+          </div>
+        )}
       </form>
-      <div>
-        <Link to="/"  onClick={handleLogout}>Logout</Link>
+      <div className="mt-6 flex space-x-4">
+        <Link to="/" onClick={handleLogout} className="text-blue-500 hover:text-blue-700">Logout</Link>
+        <Link to="/timeline" className="text-blue-500 hover:text-blue-700">Book a Ride</Link>
       </div>
     </div>
   );
