@@ -18,6 +18,8 @@ import BookingsHistory from './pages/usersdashboard/bookinghistory.tsx';
 import PaymentSuccess  from './pages/bookings/booking.sucsess.tsx';
 import PaymentFailure from './pages/bookings/booking.failed.tsx';
 import Payments from './pages/usersdashboard/payments.tsx';
+import CustomerSupportTickets from './pages/usersdashboard/customer.support ticket.tsx';
+import Notifications from './pages/usersdashboard/notificatio.tsx';
 
 import Profile from './pages/userprofile/userprofile.tsx';
 
@@ -79,6 +81,31 @@ const router = createBrowserRouter([
   element: <Payments />,
   errorElement: <Error />
 },
+{
+  path: '/customer.support tickets',
+  element: <CustomerSupportTickets />,
+  errorElement: <Error />
+},
+{
+  path: '/notifications',
+  element: <Notifications />,
+  errorElement: <Error />
+
+},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 {
@@ -107,6 +134,12 @@ const router = createBrowserRouter([
   errorElement: <Error/>
 
 },
+
+
+
+
+
+
 {
   path: '/Profile',
   element: <Profile/>,
