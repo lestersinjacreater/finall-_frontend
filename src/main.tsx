@@ -28,7 +28,9 @@ import Admindashboard from './pages/admindashboard/admin dasboard.tsx';
 import Allbookings from './pages/admindashboard/all booking.tsx';
 import NotificationForm from  './pages/admindashboard/create.notification.tsx';
 import ManageLocations from './pages/admindashboard/manage locations.tsx';
-import ManageUsers from  './pages/admindashboard/managecustomers.tsx';
+import ManageCustomers from  './pages/admindashboard/managecustomers.tsx';
+import ManageVehicles from './pages/admindashboard/managevehicles.tsx';
+
 
 
 
@@ -131,9 +133,14 @@ const router = createBrowserRouter([
 },
 {
   path: '/ManageUsers',
-  element: <ManageUsers/>,
+  element: <ManageCustomers/>,
   errorElement: <Error/>
 
+},
+{
+  path: '/ManageVehicles',
+  element: <ManageVehicles/>,
+  errorElement: <Error/>
 },
 
 
@@ -150,8 +157,6 @@ const router = createBrowserRouter([
 {
   path: '/logout',
   element: <Logout/>,
-  errorElement: <Error/>
-  
 },
 
 
