@@ -1,6 +1,6 @@
 // Importing necessary functions and types from Redux Toolkit Query and a utility for API domains
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { APIDomain } from "../../utils/APIDomains";
+
 
 // Defining a TypeScript interface for the Profile data structure
 export interface Profile {
@@ -13,7 +13,7 @@ export interface Profile {
 // Creating an API slice for profile-related operations using Redux Toolkit Query
 export const profileAPI = createApi({
     reducerPath: 'profileAPI', // Unique key for the reducer
-    baseQuery: fetchBaseQuery({ baseUrl: APIDomain }), // Base query function with the API domain
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://drill-wheel-rental-system-backend.onrender.com/api' }), // Base query function with the API domain
     tagTypes: ['Profile'], // Tag types for invalidating cache
     endpoints: (builder) => ({
         getProfile: builder.query<Profile, string>({ // Endpoint to fetch a user profile
