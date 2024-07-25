@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-// Import the login and registration API hooks
+import {jwtDecode} from 'jwt-decode';
 import { loginAPI } from '../../features/authentication/login.api'; // Adjust the import path accordingly
 import { registerAPI } from '../../features/authentication/register.api'; // Adjust the import path accordingly
 
@@ -16,9 +15,21 @@ interface InputFieldProps {
 const InputField = ({ label, type, name, placeholder, required }: InputFieldProps) => (
     <div className="mb-4">
         <label className="block text-gray-700">{label}</label>
-        <input type={type} name={name} className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-webcolor" placeholder={placeholder} required={required} />
+        <input
+            type={type}
+            name={name}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-webcolor"
+            placeholder={placeholder}
+            required={required}
+        />
     </div>
 );
+
+// Define an interface for the decoded JWT token
+interface DecodedToken {
+    userId: string;
+    exp: number; // Example of other claims
+}
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -26,6 +37,23 @@ const Navbar = () => {
     const [isRegisterVisible, setIsRegisterVisible] = useState(false);
     const [loginUser, { isLoading: isLoginLoading, error: loginError }] = loginAPI.useLoginUserMutation();
     const [registerUser, { isLoading: isRegisterLoading, error: registerError }] = registerAPI.useRegisterUserMutation();
+
+    // Function to decode JWT token and get user ID
+    const getUserIdFromToken = (): string | null => {
+        const token = localStorage.getItem('jwtToken');
+        if (token) {
+            try {
+                const decodedToken = jwtDecode<DecodedToken>(token);
+                return decodedToken.userId;
+            } catch (error) {
+                console.error('Invalid token:', error);
+                return null;
+            }
+        }
+        return null;
+    };
+
+    const userId = getUserIdFromToken();
 
     const handleLoginClick = () => {
         setIsLoginVisible(true);
@@ -37,36 +65,21 @@ const Navbar = () => {
         setIsLoginVisible(false);
     };
 
-    
-    
     const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const email = e.currentTarget.email.value;
         const password = e.currentTarget.password.value;
-    
+
         try {
             const response = await loginUser({ email, password }).unwrap();
             console.log('Login successful:', response);
-    
-            // Check if response is valid
-            if (!response || !response.token || !response.userId) {
-                throw new Error('Invalid response from server');
-            }
-    
-            // Store the token and user ID in local storage
             localStorage.setItem('jwtToken', response.token);
-            localStorage.setItem('userId', response.userId.toString());
-    
             setIsLoginVisible(false);
-    
-            // Navigate to the timeline page
             navigate('/timeline');
         } catch (err) {
             console.error('Failed to login:', err);
         }
     };
-    
-    
 
     const handleRegisterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -77,15 +90,9 @@ const Navbar = () => {
         try {
             const response = await registerUser({ fullName, email, password }).unwrap();
             console.log('Registration successful:', response);
-
-            // Automatically log in after successful registration
             localStorage.setItem('jwtToken', response.token);
-            localStorage.setItem('userId', response.userId);
-
             setIsRegisterVisible(false);
             setIsLoginVisible(false);
-
-            // Navigate to the timeline page
             navigate('/timeline');
         } catch (err) {
             console.error('Failed to register:', err);
@@ -97,6 +104,11 @@ const Navbar = () => {
             setIsLoginVisible(false);
             setIsRegisterVisible(false);
         }
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('jwtToken');
+        navigate('/');
     };
 
     return (
@@ -137,8 +149,14 @@ const Navbar = () => {
                     </ul>
                 </div>
                 <div className="navbar-end">
-                    <button onClick={handleRegisterClick} className="btn bg-bl text-white mr-2">REGISTER</button>
-                    <button onClick={handleLoginClick} className="btn text-white">LOGIN</button>
+                    {!userId ? (
+                        <>
+                            <button onClick={handleRegisterClick} className="btn bg-bl text-white mr-2">REGISTER</button>
+                            <button onClick={handleLoginClick} className="btn text-white">LOGIN</button>
+                        </>
+                    ) : (
+                        <button onClick={handleLogout} className="btn bg-red-600 text-white">LOGOUT</button>
+                    )}
                 </div>
             </nav>
 
@@ -153,13 +171,13 @@ const Navbar = () => {
                             <button type="submit" className="btn bg-black text-white w-full" disabled={isLoginLoading}>
                                 {isLoginLoading ? 'Logging in...' : 'Login'}
                             </button>
-                            {loginError && <p className="text-red-500 mt-2">{(loginError as any).data.message}</p>}
+                            {loginError && <p className="text-red-500 mt-2">Failed to login. Please try again.</p>}
                         </form>
                     </div>
                 </div>
             )}
 
-            {/* Registration Modal */}
+            {/* Register Modal */}
             {isRegisterVisible && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50 modal-background" onClick={handleModalClick}>
                     <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
@@ -168,10 +186,11 @@ const Navbar = () => {
                             <InputField label="Full Name" type="text" name="fullName" placeholder="Full Name" required />
                             <InputField label="Email Address" type="email" name="email" placeholder="Email" required />
                             <InputField label="Password" type="password" name="password" placeholder="Password" required />
+                            <InputField label="Confirm Password" type="password" name="confirmPassword" placeholder="Confirm Password" required />
                             <button type="submit" className="btn bg-black text-white w-full" disabled={isRegisterLoading}>
                                 {isRegisterLoading ? 'Registering...' : 'Register'}
                             </button>
-                            {registerError && <p className="text-red-500 mt-2">{(registerError as any).data.message}</p>}
+                            {registerError && <p className="text-red-500 mt-2">Failed to register. Please try again.</p>}
                         </form>
                     </div>
                 </div>

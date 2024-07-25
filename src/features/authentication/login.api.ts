@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {jwtDecode} from 'jwt-decode';
 
 // Interfaces for request and response types
 export interface LogInUser {
@@ -18,6 +19,13 @@ export interface LoggedInUser {
     token: string; // Add token to the response type
 }
 
+// Define an interface for the decoded JWT token
+interface DecodedToken {
+    userId: string;
+    exp: number; // Example of other claims
+    // Add other fields if necessary
+}
+
 // Create an API slice for login operations
 export const loginAPI = createApi({
     reducerPath: 'loginAPI',
@@ -29,25 +37,10 @@ export const loginAPI = createApi({
                 method: 'POST',
                 body: user,
             }),
-            // Handle successful login by storing token and userId in local storage
+            // Handle successful login by storing token in local storage
             transformResponse: (response: LoggedInUser) => {
-                if (!response) {
-                    throw new Error('No response from server');
-                }
-
-                console.log('Login response:', response); // Log the response to inspect its structure
-
-                if (!response.token) {
-                    throw new Error('Token is missing in the response');
-                }
-
-                if (!response.userId) {
-                    throw new Error('User ID is missing in the response');
-                }
-
+                // Store the token in local storage
                 localStorage.setItem('jwtToken', response.token);
-                localStorage.setItem('userId', response.userId.toString());
-
                 return response;
             }
         }),
@@ -60,10 +53,9 @@ export const loginAPI = createApi({
                     'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
                 }
             }),
-            // Clear the token and userId from local storage on logout
+            // Clear the token from local storage on logout
             transformResponse: () => {
                 localStorage.removeItem('jwtToken');
-                localStorage.removeItem('userId');
             }
         }),
         getAllLoggedInUsers: builder.query<LoggedInUser[], void>({
@@ -71,6 +63,21 @@ export const loginAPI = createApi({
         }),
     }),
 });
+
+// Function to decode the JWT token
+export const getUserIdFromToken = (): string | null => {
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+        try {
+            const decodedToken = jwtDecode<DecodedToken>(token);
+            return decodedToken.userId;
+        } catch (error) {
+            console.error('Invalid token:', error);
+            return null;
+        }
+    }
+    return null;
+};
 
 // Export hooks for the API endpoints
 //export const { useLoginUserMutation, useLogoutMutation, useGetAllLoggedInUsersQuery } = loginAPI;
